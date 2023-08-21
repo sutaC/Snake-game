@@ -1,0 +1,22 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+}
+
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 1rem;
+
+	min-height: 100vh;
+
+	font-family: 'Courier New', Courier, monospace;
+}
+
+#game {
+	width: clamp(10rem, 95%, 37rem);
+	aspect-ratio: 1;
+	background-color: #000;
+}
