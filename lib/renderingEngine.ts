@@ -164,9 +164,11 @@ export class GameEngine {
 	#oldDirection: string = this.#direction;
 
 	#snake: Array<GameObject> = [
+		new GameObject("snake", 3, 5, "lime"),
 		new GameObject("snake", 4, 5, "lime"),
-		new GameObject("snake", 5, 5, "lime"),
 	];
+
+	#apple = new GameObject("apple", 7, 5, "red");
 
 	constructor(renderingEngine: RenderingEngine) {
 		this.#renderingEngine = renderingEngine;
@@ -205,10 +207,37 @@ export class GameEngine {
 			this.#snake[0].y >= re.gameGrid ||
 			this.#snake[0].y < 0
 		) {
-			re.gameState = State.Stop;
-			alert("Game over");
-			this.#reset();
+			this.#gameOver();
 			return;
+		}
+
+		if (
+			this.#snake
+				.slice(2)
+				.find(
+					(segment) =>
+						segment.x === this.#snake[0].x &&
+						segment.y === this.#snake[0].y
+				)
+		) {
+			this.#gameOver();
+			return;
+		}
+
+		if (
+			this.#snake[0].x === this.#apple.x &&
+			this.#snake[0].y === this.#apple.y
+		) {
+			this.#snake.push(
+				new GameObject(
+					"snake",
+					this.#snake[this.#snake.length - 1].x,
+					this.#snake[this.#snake.length - 1].y,
+					"lime"
+				)
+			);
+
+			this.#summonApple();
 		}
 
 		re.clearGameBoard();
@@ -230,21 +259,49 @@ export class GameEngine {
 
 			re.drawGameObject(this.#snake[i]);
 		}
+
+		// Apple
+
+		re.drawGameObject(this.#apple);
 	}
 
-	#reset() {
+	#gameOver() {
+		alert("Game over");
+
+		dispatchEvent(new CustomEvent("gameover", { detail: { win: false } }));
+
+		this.#renderingEngine.gameState = State.Stop;
+		this.reset();
+	}
+
+	#summonApple() {
+		let x: number, y: number;
+
+		do {
+			x = Math.floor(Math.random() * 10);
+			y = Math.floor(Math.random() * 10);
+		} while (
+			this.#snake.find((segment) => segment.x === x && segment.y === y)
+		);
+
+		this.#apple.x = x;
+		this.#apple.y = y;
+	}
+
+	// User interaction
+
+	reset() {
 		this.#snake = [
+			new GameObject("snake", 3, 5, "lime"),
 			new GameObject("snake", 4, 5, "lime"),
-			new GameObject("snake", 5, 5, "lime"),
 		];
+		this.#apple = new GameObject("apple", 7, 5, "red");
 		this.#direction = Direction.Right;
 		this.#oldDirection = this.#direction;
 
 		// Starts game
 		this.#renderingEngine.gameState = State.Playing;
 	}
-
-	// User interaction
 
 	changeDirection(desiredDirection: Direction) {
 		switch (desiredDirection) {
