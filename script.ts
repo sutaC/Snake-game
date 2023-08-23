@@ -1,16 +1,22 @@
-import { RenderingEngine, GameEngine, Direction } from "./lib/snake-game.js";
+import { GraphicEngine, GameEngine, Direction } from "./lib/snake-game.js";
 import SwipeDetector from "./lib/swipe-detector.js";
 
 const canvas: HTMLCanvasElement | null = document.querySelector("#game");
+const btnPause = document.querySelector("#pause");
+const pScore = document.querySelector("#score");
 
 if (!canvas) {
 	throw new Error("Could not connect to Canvas");
 }
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerWidth;
 
-const renderingEngine = new RenderingEngine(canvas);
+const renderingEngine = new GraphicEngine(canvas);
 const gameEngine = new GameEngine(renderingEngine);
+const swipeDetector = new SwipeDetector(document.body);
+
+// Controls
 
 window.addEventListener("keydown", (event: KeyboardEvent) => {
 	switch (event.key) {
@@ -36,8 +42,6 @@ window.addEventListener("keydown", (event: KeyboardEvent) => {
 	event.preventDefault();
 });
 
-const swipeDetector = new SwipeDetector(document.body);
-
 swipeDetector.element.addEventListener("swipe", (event: CustomEventInit) => {
 	switch (event.detail.direction) {
 		case "right":
@@ -55,12 +59,16 @@ swipeDetector.element.addEventListener("swipe", (event: CustomEventInit) => {
 	}
 });
 
-const btnPause = document.querySelector("#pause");
-
-if (!btnPause) {
-	throw new Error("Could not connect to Button");
+if (btnPause) {
+	btnPause.addEventListener("click", () => {
+		gameEngine.pauseGame();
+	});
 }
 
-btnPause.addEventListener("click", () => {
-	gameEngine.pauseGame();
-});
+if (pScore) {
+	canvas.addEventListener("scoreupdate", (event: CustomEventInit) => {
+		const { score } = event.detail;
+
+		pScore.textContent = `Score: ${score ?? 0}`;
+	});
+}

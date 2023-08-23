@@ -72,8 +72,6 @@ export default class SwipeDetector {
 			}
 		}
 
-		// const swipeEvent: SwipeEvent = new CustomEvent("swipe", { detail: { direction } }
-
 		this.#element.dispatchEvent(
 			new CustomEvent("swipe", { detail: { direction } })
 		);

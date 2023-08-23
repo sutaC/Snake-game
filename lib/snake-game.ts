@@ -1,4 +1,5 @@
-export class RenderingEngine {
+export class GraphicEngine {
+	#canvas;
 	#ctx: CanvasRenderingContext2D | null | undefined = null;
 	#width;
 	#height;
@@ -13,19 +14,20 @@ export class RenderingEngine {
 
 	#gameState = State.Stop;
 
-	#update: (renderingEngine: RenderingEngine) => void = (
-		re: RenderingEngine
+	#update: (renderingEngine: GraphicEngine) => void = (
+		re: GraphicEngine
 	) => {};
 
 	constructor(canvas: HTMLCanvasElement) {
-		this.#ctx = canvas.getContext("2d");
+		this.#canvas = canvas;
+		this.#ctx = this.#canvas.getContext("2d");
 
 		if (!this.#ctx) {
 			throw new Error("Could not create Context");
 		}
 
-		this.#width = canvas.width;
-		this.#height = canvas.height;
+		this.#width = this.#canvas.width;
+		this.#height = this.#canvas.height;
 
 		this.#gap = this.#width / 100;
 		this.#cellSize =
@@ -104,7 +106,7 @@ export class RenderingEngine {
 
 	// Controll methods
 
-	set update(update: (renderingEngine: RenderingEngine) => void) {
+	set update(update: (renderingEngine: GraphicEngine) => void) {
 		this.#update = update;
 	}
 
@@ -153,12 +155,16 @@ export class RenderingEngine {
 	get gameState() {
 		return this.#gameState;
 	}
+
+	get canvas() {
+		return this.#canvas;
+	}
 }
 
 // Game
 
 export class GameEngine {
-	#renderingEngine;
+	#graphicEngine;
 
 	#direction: string = Direction.Right;
 	#oldDirection: string = this.#direction;
@@ -170,16 +176,18 @@ export class GameEngine {
 
 	#apple = new GameObject("apple", 7, 5, "red");
 
-	constructor(renderingEngine: RenderingEngine) {
-		this.#renderingEngine = renderingEngine;
+	#score = 0;
 
-		this.#renderingEngine.update = this.#update.bind(this);
+	constructor(graphicEngine: GraphicEngine) {
+		this.#graphicEngine = graphicEngine;
+
+		this.#graphicEngine.update = this.#update.bind(this);
 
 		// Starts game
-		this.#renderingEngine.gameState = State.Playing;
+		this.#graphicEngine.gameState = State.Playing;
 	}
 
-	#update(re: RenderingEngine) {
+	#update(ge: GraphicEngine) {
 		// Snakes head movment
 
 		let prevX = this.#snake[0].x,
@@ -202,9 +210,9 @@ export class GameEngine {
 		this.#oldDirection = this.#direction;
 
 		if (
-			this.#snake[0].x >= re.gameGrid ||
+			this.#snake[0].x >= ge.gameGrid ||
 			this.#snake[0].x < 0 ||
-			this.#snake[0].y >= re.gameGrid ||
+			this.#snake[0].y >= ge.gameGrid ||
 			this.#snake[0].y < 0
 		) {
 			this.#gameOver();
@@ -224,9 +232,9 @@ export class GameEngine {
 			return;
 		}
 
-		re.clearGameBoard();
+		ge.clearGameBoard();
 
-		re.drawGameObject(this.#snake[0]);
+		ge.drawGameObject(this.#snake[0]);
 
 		// Snakes tail movment
 
@@ -241,7 +249,7 @@ export class GameEngine {
 			this.#snake[i].y = prevY;
 			prevY = tmp;
 
-			re.drawGameObject(this.#snake[i]);
+			ge.drawGameObject(this.#snake[i]);
 		}
 
 		// Apple
@@ -259,18 +267,27 @@ export class GameEngine {
 				)
 			);
 
+			this.#score++;
+			ge.canvas.dispatchEvent(
+				new CustomEvent("scoreupdate", {
+					detail: { score: this.#score },
+				})
+			);
+
 			this.#summonApple();
 		}
 
-		re.drawGameObject(this.#apple);
+		ge.drawGameObject(this.#apple);
 	}
 
 	#gameOver() {
 		alert("Game over");
 
-		dispatchEvent(new CustomEvent("gameover", { detail: { win: false } }));
+		this.#graphicEngine.canvas.dispatchEvent(
+			new CustomEvent("gameover", { detail: { win: this.#score >= 98 } })
+		);
 
-		this.#renderingEngine.gameState = State.Stop;
+		this.#graphicEngine.gameState = State.Stop;
 		this.reset();
 	}
 
@@ -296,11 +313,13 @@ export class GameEngine {
 			new GameObject("snake", 4, 5, "lime"),
 		];
 		this.#apple = new GameObject("apple", 7, 5, "red");
+
 		this.#direction = Direction.Right;
 		this.#oldDirection = this.#direction;
 
+		this.#score = 0;
 		// Starts game
-		this.#renderingEngine.gameState = State.Playing;
+		this.#graphicEngine.gameState = State.Playing;
 	}
 
 	changeDirection(desiredDirection: Direction) {
@@ -325,12 +344,12 @@ export class GameEngine {
 	}
 
 	pauseGame() {
-		this.#renderingEngine.gameState =
-			this.#renderingEngine.gameState === State.Playing
+		this.#graphicEngine.gameState =
+			this.#graphicEngine.gameState === State.Playing
 				? State.Stop
 				: State.Playing;
 
-		if (this.#renderingEngine.gameState === State.Stop) alert("Pause");
+		if (this.#graphicEngine.gameState === State.Stop) alert("Pause");
 	}
 }
 

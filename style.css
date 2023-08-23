@@ -12,11 +12,20 @@ body {
 
 	min-height: 100vh;
 
-	font-family: 'Courier New', Courier, monospace;
+	font-family: "Courier New", Courier, monospace;
 }
 
 #game {
 	width: clamp(10rem, 95%, 37rem);
 	aspect-ratio: 1;
 	background-color: #000;
+}
+
+.wrap {
+	width: 100%;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20%;
 }
