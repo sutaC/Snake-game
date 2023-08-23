@@ -10,7 +10,9 @@ body {
 	flex-direction: column;
 	gap: 1rem;
 
-	min-height: 100vh;
+	max-height: 100vh;
+	box-sizing: border-box;
+	margin: 0;
 
 	font-family: "Courier New", Courier, monospace;
 }
