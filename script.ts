@@ -54,3 +54,7 @@ swipeDetector.element.addEventListener("swipe", (event: CustomEventInit) => {
 			break;
 	}
 });
+
+document.querySelector("#pause")?.addEventListener("click", () => {
+	gameEngine.pauseGame();
+});
