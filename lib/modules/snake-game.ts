@@ -184,7 +184,7 @@ export class GameEngine {
 		this.#graphicEngine.update = this.#update.bind(this);
 
 		// Starts game
-		this.#graphicEngine.gameState = State.Playing;
+		// this.#graphicEngine.gameState = State.Playing;
 	}
 
 	#update(ge: GraphicEngine) {

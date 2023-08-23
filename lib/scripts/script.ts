@@ -1,5 +1,5 @@
-import { GraphicEngine, GameEngine, Direction } from "./lib/snake-game.js";
-import SwipeDetector from "./lib/swipe-detector.js";
+import { GraphicEngine, GameEngine, Direction } from "../modules/snake-game.js";
+import SwipeDetector from "../modules/swipe-detector.js";
 
 const canvas: HTMLCanvasElement | null = document.querySelector("#game");
 const btnPause = document.querySelector("#pause");
