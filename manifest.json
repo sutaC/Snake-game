@@ -1,7 +1,7 @@
 {
 	"name": "Snake",
 	"short_name": "Snake",
-	"start_url": "/",
+	"start_url": "https://sutac.github.io/Snake-game/",
 	"icons": [
 		{
 			"src": "./docs/assets/manifest-icon-192.maskable.png",
