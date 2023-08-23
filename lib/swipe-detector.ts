@@ -4,7 +4,7 @@ export default class SwipeDetector {
 	#startX: number | null = null;
 	#startY: number | null = null;
 
-	#treshold = 100;
+	#treshold = 0;
 
 	constructor(element: HTMLElement) {
 		this.#element = element;
