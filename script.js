@@ -30,7 +30,7 @@ window.addEventListener("keydown", (event) => {
     }
     event.preventDefault();
 });
-const swipeDetector = new SwipeDetector(canvas);
+const swipeDetector = new SwipeDetector(document.body);
 swipeDetector.element.addEventListener("swipe", (event) => {
     switch (event.detail.direction) {
         case "right":
