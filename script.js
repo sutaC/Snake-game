@@ -1,4 +1,5 @@
-import { RenderingEngine, GameEngine, Direction, } from "./lib/renderingEngine.js";
+import { RenderingEngine, GameEngine, Direction } from "./lib/snake-game.js";
+import SwipeDetector from "./lib/swipe-detector.js";
 const canvas = document.querySelector("#game");
 if (!canvas) {
     throw new Error("Could not connect to Canvas");
@@ -28,4 +29,21 @@ window.addEventListener("keydown", (event) => {
             return;
     }
     event.preventDefault();
+});
+const swipeDetector = new SwipeDetector(canvas);
+swipeDetector.element.addEventListener("swipe", (event) => {
+    switch (event.detail.direction) {
+        case "right":
+            gameEngine.changeDirection(Direction.Right);
+            break;
+        case "left":
+            gameEngine.changeDirection(Direction.Left);
+            break;
+        case "up":
+            gameEngine.changeDirection(Direction.Up);
+            break;
+        case "down":
+            gameEngine.changeDirection(Direction.Down);
+            break;
+    }
 });

@@ -224,22 +224,6 @@ export class GameEngine {
 			return;
 		}
 
-		if (
-			this.#snake[0].x === this.#apple.x &&
-			this.#snake[0].y === this.#apple.y
-		) {
-			this.#snake.push(
-				new GameObject(
-					"snake",
-					this.#snake[this.#snake.length - 1].x,
-					this.#snake[this.#snake.length - 1].y,
-					"lime"
-				)
-			);
-
-			this.#summonApple();
-		}
-
 		re.clearGameBoard();
 
 		re.drawGameObject(this.#snake[0]);
@@ -261,6 +245,22 @@ export class GameEngine {
 		}
 
 		// Apple
+
+		if (
+			this.#snake[0].x === this.#apple.x &&
+			this.#snake[0].y === this.#apple.y
+		) {
+			this.#snake.push(
+				new GameObject(
+					"snake",
+					this.#snake[this.#snake.length - 1].x,
+					this.#snake[this.#snake.length - 1].y,
+					"lime"
+				)
+			);
+
+			this.#summonApple();
+		}
 
 		re.drawGameObject(this.#apple);
 	}
