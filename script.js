@@ -47,6 +47,10 @@ swipeDetector.element.addEventListener("swipe", (event) => {
             break;
     }
 });
-document.querySelector("#pause")?.addEventListener("click", () => {
+const btnPause = document.querySelector("#pause");
+if (!btnPause) {
+    throw new Error("Could not connect to Button");
+}
+btnPause.addEventListener("click", () => {
     gameEngine.pauseGame();
 });
