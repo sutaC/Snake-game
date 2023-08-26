@@ -71,4 +71,8 @@ if (pScore) {
 
 		pScore.textContent = `Score: ${score ?? 0}`;
 	});
+
+	canvas.addEventListener("gameover", (event: CustomEventInit) => {
+		pScore.textContent = `Score: 0`;
+	});
 }

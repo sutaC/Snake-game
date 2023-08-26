@@ -219,19 +219,6 @@ export class GameEngine {
 			return;
 		}
 
-		if (
-			this.#snake
-				.slice(2)
-				.find(
-					(segment) =>
-						segment.x === this.#snake[0].x &&
-						segment.y === this.#snake[0].y
-				)
-		) {
-			this.#gameOver();
-			return;
-		}
-
 		ge.clearGameBoard();
 
 		ge.drawGameObject(this.#snake[0]);
@@ -250,6 +237,19 @@ export class GameEngine {
 			prevY = tmp;
 
 			ge.drawGameObject(this.#snake[i]);
+		}
+
+		if (
+			this.#snake
+				.slice(2)
+				.find(
+					(segment) =>
+						segment.x === this.#snake[0].x &&
+						segment.y === this.#snake[0].y
+				)
+		) {
+			this.#gameOver();
+			return;
 		}
 
 		// Apple
