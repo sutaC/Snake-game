@@ -170,7 +170,7 @@ export class GameEngine {
 	#oldDirection: string = this.#direction;
 
 	#snake: Array<GameObject> = [
-		new GameObject("snake", 3, 5, "lime"),
+		new GameObject("snake", 3, 5, "green"),
 		new GameObject("snake", 4, 5, "lime"),
 	];
 
@@ -309,7 +309,7 @@ export class GameEngine {
 
 	reset() {
 		this.#snake = [
-			new GameObject("snake", 3, 5, "lime"),
+			new GameObject("snake", 3, 5, "green"),
 			new GameObject("snake", 4, 5, "lime"),
 		];
 		this.#apple = new GameObject("apple", 7, 5, "red");
