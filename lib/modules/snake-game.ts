@@ -447,10 +447,10 @@ enum State {
 }
 
 enum GameAssets {
-	snakeHeadRight = "./docs/assets/images/sprites/snake-head-right.svg",
-	snakeHeadDown = "./docs/assets/images/sprites/snake-head-down.svg",
-	snakeHeadLeft = "./docs/assets/images/sprites/snake-head-left.svg",
-	snakeHeadUp = "./docs/assets/images/sprites/snake-head-up.svg",
-	snakeTail = "./docs/assets/images/sprites/snake-tail.svg",
-	apple = "./docs/assets/images/sprites/apple.svg",
+	snakeHeadRight = "/docs/assets/snake-head-right.svg",
+	snakeHeadDown = "/docs/assets/snake-head-down.svg",
+	snakeHeadLeft = "/docs/assets/snake-head-left.svg",
+	snakeHeadUp = "/docs/assets/snake-head-up.svg",
+	snakeTail = "/docs/assets/snake-tail.svg",
+	apple = "/docs/assets/apple.svg",
 }
