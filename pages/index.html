@@ -5,16 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#000000">
-    <link rel="shortcut icon" href="/docs/images/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon">
     <title>Snake</title>
 
-    <link rel="stylesheet" href="./lib/style/style.css">
-    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="/style/style.css">
+    <link rel="manifest" href="/manifest.json">
 
-    <script type="module" src="./lib/scripts/script.js" defer></script>
+    <script type="module" src="/scripts/script.js" defer></script>
     <script>
         if ('serviceworker' in navigator) {
-            navigator.serviceWorker.register("./lib/scripts/service-worker.js")
+            navigator.serviceWorker.register("./scripts/service-worker.js")
         }
     </script>
 </head>
@@ -33,17 +33,17 @@
                 <p id="best-score">Best Score 0</p>
             </div>
 
-            <button id="btn-pause"><img src="/docs/images/icons/icon-pause.svg" alt="pause"></button>
+            <button id="btn-pause"><img src="./images/icons/icon-pause.svg" alt="pause"></button>
         </div>
 
         <canvas id="game" width="500px" height="500px"></canvas>
 
         <dialog id="game-dialog" class="game-dialog">
             <h2 id="dialogHeader">Play!</h2>
-            <img src="/docs/images/drawings/illustration-pause.png" alt="game state illustration" id="illustration">
+            <img src="./images/drawings/illustration-pause.png" alt="game state illustration" id="illustration">
             <div class="button-wrap">
-                <button id="btn-reset"><img src="/docs/images/icons/icon-reset.svg" alt="reset"></button>
-                <button id="btn-play"><img src="/docs/images/icons/icon-play.svg" alt="play"></button>
+                <button id="btn-reset"><img src="./images/icons/icon-reset.svg" alt="reset"></button>
+                <button id="btn-play"><img src="./images/icons/icon-play.svg" alt="play"></button>
             </div>
         </dialog>
     </main>

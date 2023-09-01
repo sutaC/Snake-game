@@ -1,3 +1,5 @@
+import { log } from "console";
+
 export class GraphicEngine {
 	#canvas;
 	#ctx: CanvasRenderingContext2D | null | undefined = null;
@@ -61,8 +63,6 @@ export class GraphicEngine {
 
 		const img = new Image(this.#cellSize, this.#cellSize);
 		img.src = imgSrc;
-
-		console.log(img.complete);
 
 		this.#ctx.beginPath();
 
@@ -447,10 +447,10 @@ enum State {
 }
 
 enum GameAssets {
-	snakeHeadRight = "/lib/modules/images/snake-head-right.svg",
-	snakeHeadDown = "/lib/modules/images/snake-head-down.svg",
-	snakeHeadLeft = "/lib/modules/images/snake-head-left.svg",
-	snakeHeadUp = "/lib/modules/images/snake-head-up.svg",
-	snakeTail = "/lib/modules/images/snake-tail.svg",
-	apple = "/lib/modules/images/apple.svg",
+	snakeHeadRight = "/scripts/modules/assets/snake-head-right.svg",
+	snakeHeadDown = "/scripts/modules/assets/snake-head-down.svg",
+	snakeHeadLeft = "/scripts/modules/assets/snake-head-left.svg",
+	snakeHeadUp = "/scripts/modules/assets/snake-head-up.svg",
+	snakeTail = "/scripts/modules/assets/snake-tail.svg",
+	apple = "/scripts/modules/assets/apple.svg",
 }
