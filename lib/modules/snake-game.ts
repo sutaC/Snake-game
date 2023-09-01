@@ -10,12 +10,13 @@ export class GraphicEngine {
 
 	#lastTime = 0;
 	#timer = 0;
-	#interval = (1000 / 60) * 20;
+	#interval = 1000 / 60;
 
 	#gameState = State.Stop;
 
-	#update: (renderingEngine: GraphicEngine) => void = (
-		re: GraphicEngine
+	#update: (graphicEngine: GraphicEngine, deltaTime: number) => void = (
+		ge: GraphicEngine,
+		dt: number
 	) => {};
 
 	constructor(canvas: HTMLCanvasElement) {
@@ -40,7 +41,7 @@ export class GraphicEngine {
 
 	// Draw Methods
 
-	#drawRect(x: number, y: number, color: string) {
+	#drawRect(x: number, y: number, color: string, imgSrc?: string) {
 		if (!this.#ctx) {
 			throw new Error("Could not connect to the Context");
 		}
@@ -49,6 +50,23 @@ export class GraphicEngine {
 
 		this.#ctx.fillStyle = color;
 		this.#ctx.fillRect(x, y, this.#cellSize, this.#cellSize);
+
+		this.#ctx.closePath();
+	}
+
+	#drawImage(x: number, y: number, imgSrc: string) {
+		if (!this.#ctx) {
+			throw new Error("Could not connect to the Context");
+		}
+
+		const img = new Image(this.#cellSize, this.#cellSize);
+		img.src = imgSrc;
+
+		console.log(img.complete);
+
+		this.#ctx.beginPath();
+
+		this.#ctx.drawImage(img, x, y, this.#cellSize, this.#cellSize);
 
 		this.#ctx.closePath();
 	}
@@ -68,7 +86,7 @@ export class GraphicEngine {
 				x < this.#height;
 				x += this.#cellSize + this.#gap
 			) {
-				this.#drawRect(x, y, "white");
+				this.#drawRect(x, y, "#d4d0ec");
 			}
 		}
 
@@ -99,14 +117,16 @@ export class GraphicEngine {
 		this.#timer = 0;
 
 		// Draw on update
-		this.#update(this);
+		this.#update(this, deltaTime);
 
 		return requestAnimationFrame(this.#render.bind(this));
 	}
 
 	// Controll methods
 
-	set update(update: (renderingEngine: GraphicEngine) => void) {
+	set update(
+		update: (renderingEngine: GraphicEngine, deltaTime: number) => void
+	) {
 		this.#update = update;
 	}
 
@@ -118,15 +138,20 @@ export class GraphicEngine {
 			throw new Error("Y index out of scope");
 		}
 
-		this.#drawRect(
-			this.#gap * 2 +
+		const posX =
+				this.#gap * 2 +
 				this.#cellSize +
 				gameObject.x * (this.#cellSize + this.#gap),
-			this.#gap * 2 +
+			posY =
+				this.#gap * 2 +
 				this.#cellSize +
-				gameObject.y * (this.#cellSize + this.#gap),
-			gameObject.color
-		);
+				gameObject.y * (this.#cellSize + this.#gap);
+
+		if (gameObject.imgSrc.length > 0) {
+			this.#drawImage(posX, posY, gameObject.imgSrc);
+		} else if (gameObject.color.length > 0) {
+			this.#drawRect(posX, posY, gameObject.color);
+		}
 	}
 
 	clearGameBoard() {
@@ -170,24 +195,44 @@ export class GameEngine {
 	#oldDirection: string = this.#direction;
 
 	#snake: Array<GameObject> = [
-		new GameObject("snake", 3, 5, "green"),
-		new GameObject("snake", 4, 5, "lime"),
+		new GameObject(4, 5, "#0ff409", GameAssets.snakeHeadRight),
+		new GameObject(3, 5, "#0ff409", GameAssets.snakeTail),
 	];
 
-	#apple = new GameObject("apple", 7, 5, "red");
+	#apple = new GameObject(7, 5, "#f50a8b", GameAssets.apple);
 
 	#score = 0;
+
+	// Movement variables
+
+	#time = 0;
+	#speed = 30;
 
 	constructor(graphicEngine: GraphicEngine) {
 		this.#graphicEngine = graphicEngine;
 
 		this.#graphicEngine.update = this.#update.bind(this);
-
-		// Starts game
-		// this.#graphicEngine.gameState = State.Playing;
 	}
 
-	#update(ge: GraphicEngine) {
+	#update(ge: GraphicEngine, deltaTime: number) {
+		this.#time += deltaTime;
+
+		if (this.#time >= 100 - (this.#speed + this.#score / 3)) {
+			this.#time = 0;
+
+			this.#snakeMovment();
+
+			if (this.#checkCollison(ge)) {
+				return;
+			}
+		}
+
+		this.#drawScene(ge);
+	}
+
+	// Update steps
+
+	#snakeMovment() {
 		// Snakes head movment
 
 		let prevX = this.#snake[0].x,
@@ -196,32 +241,25 @@ export class GameEngine {
 		switch (this.#direction) {
 			case Direction.Right:
 				this.#snake[0].x++;
+				this.#snake[0].imgSrc = GameAssets.snakeHeadRight;
 				break;
 			case Direction.Left:
 				this.#snake[0].x--;
+				this.#snake[0].imgSrc = GameAssets.snakeHeadLeft;
+
 				break;
 			case Direction.Up:
 				this.#snake[0].y--;
+				this.#snake[0].imgSrc = GameAssets.snakeHeadUp;
+
 				break;
 			case Direction.Down:
 				this.#snake[0].y++;
+				this.#snake[0].imgSrc = GameAssets.snakeHeadDown;
+
 				break;
 		}
 		this.#oldDirection = this.#direction;
-
-		if (
-			this.#snake[0].x >= ge.gameGrid ||
-			this.#snake[0].x < 0 ||
-			this.#snake[0].y >= ge.gameGrid ||
-			this.#snake[0].y < 0
-		) {
-			this.#gameOver();
-			return;
-		}
-
-		ge.clearGameBoard();
-
-		ge.drawGameObject(this.#snake[0]);
 
 		// Snakes tail movment
 
@@ -235,9 +273,23 @@ export class GameEngine {
 			tmp = this.#snake[i].y;
 			this.#snake[i].y = prevY;
 			prevY = tmp;
-
-			ge.drawGameObject(this.#snake[i]);
 		}
+	}
+
+	#checkCollison(ge: GraphicEngine) {
+		// Snake wall collison
+
+		if (
+			this.#snake[0].x >= ge.gameGrid ||
+			this.#snake[0].x < 0 ||
+			this.#snake[0].y >= ge.gameGrid ||
+			this.#snake[0].y < 0
+		) {
+			this.#gameOver();
+			return true;
+		}
+
+		// Snake self collison
 
 		if (
 			this.#snake
@@ -249,10 +301,10 @@ export class GameEngine {
 				)
 		) {
 			this.#gameOver();
-			return;
+			return true;
 		}
 
-		// Apple
+		// Apple collison
 
 		if (
 			this.#snake[0].x === this.#apple.x &&
@@ -260,14 +312,15 @@ export class GameEngine {
 		) {
 			this.#snake.push(
 				new GameObject(
-					"snake",
 					this.#snake[this.#snake.length - 1].x,
 					this.#snake[this.#snake.length - 1].y,
-					"lime"
+					this.#snake[this.#snake.length - 1].color,
+					this.#snake[this.#snake.length - 1].imgSrc
 				)
 			);
 
 			this.#score++;
+
 			ge.canvas.dispatchEvent(
 				new CustomEvent("scoreupdate", {
 					detail: { score: this.#score },
@@ -277,18 +330,27 @@ export class GameEngine {
 			this.#summonApple();
 		}
 
-		ge.drawGameObject(this.#apple);
+		return false;
 	}
 
-	#gameOver() {
-		alert("Game over");
+	#drawScene(graphicEngine: GraphicEngine) {
+		graphicEngine.clearGameBoard();
 
+		this.#snake.forEach((segment) => {
+			graphicEngine.drawGameObject(segment);
+		});
+
+		graphicEngine.drawGameObject(this.#apple);
+	}
+
+	// Game events
+
+	#gameOver() {
 		this.#graphicEngine.canvas.dispatchEvent(
 			new CustomEvent("gameover", { detail: { win: this.#score >= 98 } })
 		);
 
 		this.#graphicEngine.gameState = State.Stop;
-		this.reset();
 	}
 
 	#summonApple() {
@@ -309,10 +371,10 @@ export class GameEngine {
 
 	reset() {
 		this.#snake = [
-			new GameObject("snake", 3, 5, "green"),
-			new GameObject("snake", 4, 5, "lime"),
+			new GameObject(4, 5, "#0ff409", GameAssets.snakeHeadRight),
+			new GameObject(3, 5, "#0ff409", GameAssets.snakeTail),
 		];
-		this.#apple = new GameObject("apple", 7, 5, "red");
+		this.#apple = new GameObject(7, 5, "#f50a8b", GameAssets.apple);
 
 		this.#direction = Direction.Right;
 		this.#oldDirection = this.#direction;
@@ -343,30 +405,31 @@ export class GameEngine {
 		this.#direction = desiredDirection;
 	}
 
-	pauseGame() {
-		this.#graphicEngine.gameState =
-			this.#graphicEngine.gameState === State.Playing
-				? State.Stop
-				: State.Playing;
-
-		if (this.#graphicEngine.gameState === State.Stop) alert("Pause");
+	pauseGame(pause: boolean) {
+		if (pause) {
+			this.#graphicEngine.gameState = State.Stop;
+		} else {
+			this.#graphicEngine.gameState = State.Playing;
+		}
 	}
 }
 
 // ---
 
 class GameObject {
-	name: string;
+	imgSrc: string = "";
 	x: number;
 	y: number;
 	color = "white";
 
-	constructor(name: string, x: number, y: number, color?: string) {
-		this.name = name;
+	constructor(x: number, y: number, color?: string, imgSrc?: string) {
 		this.x = x;
 		this.y = y;
 		if (color) {
 			this.color = color;
+		}
+		if (imgSrc) {
+			this.imgSrc = imgSrc;
 		}
 	}
 }
@@ -381,4 +444,13 @@ export enum Direction {
 enum State {
 	Playing,
 	Stop,
+}
+
+enum GameAssets {
+	snakeHeadRight = "/lib/modules/images/snake-head-right.svg",
+	snakeHeadDown = "/lib/modules/images/snake-head-down.svg",
+	snakeHeadLeft = "/lib/modules/images/snake-head-left.svg",
+	snakeHeadUp = "/lib/modules/images/snake-head-up.svg",
+	snakeTail = "/lib/modules/images/snake-tail.svg",
+	apple = "/lib/modules/images/apple.svg",
 }

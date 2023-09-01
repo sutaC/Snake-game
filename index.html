@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#000000">
+    <link rel="shortcut icon" href="/docs/images/logo.png" type="image/x-icon">
     <title>Snake</title>
 
     <link rel="stylesheet" href="./lib/style/style.css">
@@ -19,12 +20,38 @@
 </head>
 
 <body>
-    <h1>Snake Game</h1>
-    <canvas id="game" width="500px" height="500px"></canvas>
-    <div class="wrap">
-        <button id="pause">Pause</button>
-        <p id="score">Score: 0</p>
-    </div>
+
+    <header>
+        <h1>Snake Game</h1>
+    </header>
+
+    <main>
+
+        <div class="game-controlls">
+            <div class="game-score">
+                <p id="score">Score 0</p>
+                <p id="best-score">Best Score 0</p>
+            </div>
+
+            <button id="btn-pause"><img src="/docs/images/icons/icon-pause.svg" alt="pause"></button>
+        </div>
+
+        <canvas id="game" width="500px" height="500px"></canvas>
+
+        <dialog id="game-dialog" class="game-dialog">
+            <h2 id="dialogHeader">Play!</h2>
+            <img src="/docs/images/drawings/illustration-pause.png" alt="game state illustration" id="illustration">
+            <div class="button-wrap">
+                <button id="btn-reset"><img src="/docs/images/icons/icon-reset.svg" alt="reset"></button>
+                <button id="btn-play"><img src="/docs/images/icons/icon-play.svg" alt="play"></button>
+            </div>
+        </dialog>
+    </main>
+
+    <footer>
+        <p>Copyright © 2023 Antoni Siekański</p>
+    </footer>
+
 </body>
 
 </html>
