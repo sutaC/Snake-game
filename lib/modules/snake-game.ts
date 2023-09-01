@@ -62,8 +62,6 @@ export class GraphicEngine {
 		const img = new Image(this.#cellSize, this.#cellSize);
 		img.src = imgSrc;
 
-		console.log(img.complete);
-
 		this.#ctx.beginPath();
 
 		this.#ctx.drawImage(img, x, y, this.#cellSize, this.#cellSize);
