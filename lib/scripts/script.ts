@@ -1,5 +1,5 @@
-import { GraphicEngine, GameEngine, Direction } from "./modules/snake-game.js";
-import SwipeDetector from "./modules/swipe-detector.js";
+import { GraphicEngine, GameEngine, Direction } from "../modules/snake-game.js";
+import SwipeDetector from "../modules/swipe-detector.js";
 
 // Elements
 
@@ -33,9 +33,9 @@ const swipeDetector = new SwipeDetector(document.body);
 // Modal illustrations
 
 enum Illustration {
-	win = "./images/drawings/illustration-win.png",
-	pause = "./images/drawings/illustration-pause.png",
-	lose = "./images/drawings/illustration-lose.png",
+	win = "/docs/images/drawings/illustration-win.png",
+	pause = "/docs/images/drawings/illustration-pause.png",
+	lose = "/docs/images/drawings/illustration-lose.png",
 }
 
 // Buttons
