@@ -33,9 +33,9 @@ const swipeDetector = new SwipeDetector(document.body);
 // Modal illustrations
 
 enum Illustration {
-	win = "/docs/images/drawings/illustration-win.png",
-	pause = "/docs/images/drawings/illustration-pause.png",
-	lose = "/docs/images/drawings/illustration-lose.png",
+	win = "./docs/assets/	images/drawings/illustration-win.png",
+	pause = "./docs/assets/images/drawings/illustration-pause.png",
+	lose = "./docs/assets/images/drawings/illustration-lose.png",
 }
 
 // Buttons
