@@ -113,9 +113,11 @@ swipeDetector.element.addEventListener("swipe", (event: CustomEventInit) => {
 
 //  Score
 
-let bestScore = 0;
+let bestScore: number = Number(localStorage.getItem("bestscore")) ?? 0;
 
 if (pScore && pBestScore) {
+	pBestScore.textContent = `Best Score ${bestScore}`;
+
 	canvas.addEventListener("scoreupdate", (event: CustomEventInit) => {
 		const { score } = event.detail;
 
@@ -123,7 +125,9 @@ if (pScore && pBestScore) {
 
 		if (score > bestScore) {
 			bestScore = score;
+			localStorage.setItem("bestscore", score);
 			pBestScore.textContent = `Best Score ${score ?? 0}`;
+			console.log(bestScore);
 		}
 	});
 }

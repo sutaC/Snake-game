@@ -14,6 +14,8 @@ export class GraphicEngine {
 
 	#gameState = State.Stop;
 
+	// Particles
+
 	#update: (graphicEngine: GraphicEngine, deltaTime: number) => void = (
 		ge: GraphicEngine,
 		dt: number
@@ -196,7 +198,6 @@ export class GameEngine {
 		new GameObject(4, 5, "#0ff409", GameAssets.snakeHeadRight),
 		new GameObject(3, 5, "#0ff409", GameAssets.snakeTail),
 	];
-
 	#apple = new GameObject(7, 5, "#f50a8b", GameAssets.apple);
 
 	#score = 0;
@@ -204,7 +205,6 @@ export class GameEngine {
 	// Movement variables
 
 	#time = 0;
-	#speed = 30;
 
 	constructor(graphicEngine: GraphicEngine) {
 		this.#graphicEngine = graphicEngine;
@@ -213,9 +213,11 @@ export class GameEngine {
 	}
 
 	#update(ge: GraphicEngine, deltaTime: number) {
+		this.#drawScene(ge);
+
 		this.#time += deltaTime;
 
-		if (this.#time >= 100 - (this.#speed + this.#score / 3)) {
+		if (this.#time >= 120 - this.#score / 2) {
 			this.#time = 0;
 
 			this.#snakeMovment();
@@ -224,8 +226,6 @@ export class GameEngine {
 				return;
 			}
 		}
-
-		this.#drawScene(ge);
 	}
 
 	// Update steps
