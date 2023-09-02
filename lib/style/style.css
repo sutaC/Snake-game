@@ -25,6 +25,7 @@ html {
 body {
 	position: fixed;
 	inset: 0 0;
+ overscroll-behaviour: contain;
 
 	background: var(--clr-neutral-1);
 
