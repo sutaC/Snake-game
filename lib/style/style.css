@@ -23,6 +23,9 @@ html {
 /* Styles */
 
 body {
+	position: fixed;
+	inset: 0 0;
+
 	background: var(--clr-neutral-1);
 
 	display: flex;
