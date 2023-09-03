@@ -14,7 +14,7 @@ export class GraphicEngine {
 
 	#gameState = State.Stop;
 
-	// Particles
+	#particles: Array<Particle> = [];
 
 	#update: (graphicEngine: GraphicEngine, deltaTime: number) => void = (
 		ge: GraphicEngine,
@@ -37,13 +37,30 @@ export class GraphicEngine {
 			(this.#width - this.#gap * (this.#gameGrid + 3)) /
 			(this.#gameGrid + 2);
 
-		this.#drawBorder();
 		this.#render(0);
 	}
 
 	// Draw Methods
 
-	#drawRect(x: number, y: number, color: string, imgSrc?: string) {
+	#drawParticle(particle: Particle) {
+		if (!this.#ctx) {
+			throw new Error("Could not connect to the Context");
+		}
+
+		this.#ctx.beginPath();
+
+		this.#ctx.fillStyle = particle.color;
+		this.#ctx.fillRect(
+			particle.x,
+			particle.y,
+			particle.size,
+			particle.size
+		);
+
+		this.#ctx.closePath();
+	}
+
+	#drawRect(x: number, y: number, color: string) {
 		if (!this.#ctx) {
 			throw new Error("Could not connect to the Context");
 		}
@@ -71,28 +88,6 @@ export class GraphicEngine {
 		this.#ctx.closePath();
 	}
 
-	#drawBorder() {
-		if (!this.#ctx) {
-			throw new Error("Could not connect to the Context");
-		}
-
-		for (
-			let y = this.#gap;
-			y < this.#height;
-			y += this.#cellSize + this.#gap
-		) {
-			for (
-				let x = this.#gap;
-				x < this.#height;
-				x += this.#cellSize + this.#gap
-			) {
-				this.#drawRect(x, y, "#d4d0ec");
-			}
-		}
-
-		this.clearGameBoard();
-	}
-
 	// Render methods
 
 	#render(timeStamp: number): number {
@@ -116,19 +111,53 @@ export class GraphicEngine {
 
 		this.#timer = 0;
 
+		// Clears board
+		this.#ctx.clearRect(0, 0, this.#width, this.#height);
+
+		// Draw border
+		for (let y = 0; y <= this.#gameGrid + 1; y++) {
+			for (let x = 0; x <= this.#gameGrid + 1; x++) {
+				if (
+					y === 0 ||
+					y === this.#gameGrid + 1 ||
+					x === 0 ||
+					x === this.#gameGrid + 1
+				) {
+					this.#drawRect(
+						this.#gap + x * (this.#cellSize + this.#gap),
+						this.#gap + y * (this.#cellSize + this.#gap),
+						"#d4d0ec"
+					);
+				}
+			}
+		}
+
 		// Draw on update
 		this.#update(this, deltaTime);
+
+		// Draw particles
+		if (this.#particles.length > 0) {
+			for (let i = 0; i < this.#particles.length; i++) {
+				if (!this.#particles[i]) {
+					continue;
+				}
+
+				this.#particles[i].update(deltaTime);
+				this.#drawParticle(this.#particles[i]);
+
+				if (
+					this.#particles[i].size <= 5 ||
+					this.#particles[i].size === Infinity
+				) {
+					delete this.#particles[i];
+				}
+			}
+		}
 
 		return requestAnimationFrame(this.#render.bind(this));
 	}
 
 	// Controll methods
-
-	set update(
-		update: (renderingEngine: GraphicEngine, deltaTime: number) => void
-	) {
-		this.#update = update;
-	}
 
 	drawGameObject(gameObject: GameObject) {
 		if (gameObject.x < 0 || gameObject.x >= this.#gameGrid) {
@@ -154,17 +183,20 @@ export class GraphicEngine {
 		}
 	}
 
-	clearGameBoard() {
-		if (!this.#ctx) {
-			throw new Error("Could not connect to the Context");
+	summonParticles(x: number, y: number, color: string) {
+		const posX =
+				this.#gap * 2 +
+				this.#cellSize * 1.5 +
+				x * (this.#cellSize + this.#gap),
+			posY =
+				this.#gap * 2 +
+				this.#cellSize * 1.5 +
+				y * (this.#cellSize + this.#gap);
+		for (let i = 0; i < 15; i++) {
+			this.#particles.push(
+				new Particle(posX, posY, this.#cellSize / 3, color)
+			);
 		}
-
-		this.#ctx.clearRect(
-			this.#gap + this.#cellSize,
-			this.#gap + this.#cellSize,
-			(this.#cellSize + this.#gap) * this.#gameGrid + this.#gap,
-			(this.#cellSize + this.#gap) * this.#gameGrid + this.#gap
-		);
 	}
 
 	// Getters & Setters
@@ -183,6 +215,12 @@ export class GraphicEngine {
 
 	get canvas() {
 		return this.#canvas;
+	}
+
+	set update(
+		update: (renderingEngine: GraphicEngine, deltaTime: number) => void
+	) {
+		this.#update = update;
 	}
 }
 
@@ -205,6 +243,7 @@ export class GameEngine {
 	// Movement variables
 
 	#time = 0;
+	#grow = false;
 
 	constructor(graphicEngine: GraphicEngine) {
 		this.#graphicEngine = graphicEngine;
@@ -261,16 +300,29 @@ export class GameEngine {
 
 		// Snakes tail movment
 
-		let tmp;
+		if (this.#grow) {
+			this.#snake = [
+				this.#snake[0],
+				new GameObject(prevX, prevY, "#0ff409", GameAssets.snakeTail),
+				...this.#snake.slice(1),
+			];
 
-		for (let i = 1; i < this.#snake.length; i++) {
-			tmp = this.#snake[i].x;
-			this.#snake[i].x = prevX;
-			prevX = tmp;
+			this.#grow = false;
 
-			tmp = this.#snake[i].y;
-			this.#snake[i].y = prevY;
-			prevY = tmp;
+			this.#graphicEngine.summonParticles(
+				this.#snake[this.#snake.length - 1].x,
+				this.#snake[this.#snake.length - 1].y,
+				this.#snake[this.#snake.length - 1].color
+			);
+		} else {
+			this.#snake[this.#snake.length - 1].x = prevX;
+			this.#snake[this.#snake.length - 1].y = prevY;
+
+			this.#snake = [
+				this.#snake[0],
+				this.#snake[this.#snake.length - 1],
+				...this.#snake.slice(1, this.#snake.length - 1),
+			];
 		}
 	}
 
@@ -291,7 +343,7 @@ export class GameEngine {
 
 		if (
 			this.#snake
-				.slice(2)
+				.slice(1)
 				.find(
 					(segment) =>
 						segment.x === this.#snake[0].x &&
@@ -308,15 +360,7 @@ export class GameEngine {
 			this.#snake[0].x === this.#apple.x &&
 			this.#snake[0].y === this.#apple.y
 		) {
-			this.#snake.push(
-				new GameObject(
-					this.#snake[this.#snake.length - 1].x,
-					this.#snake[this.#snake.length - 1].y,
-					this.#snake[this.#snake.length - 1].color,
-					this.#snake[this.#snake.length - 1].imgSrc
-				)
-			);
-
+			this.#grow = true;
 			this.#score++;
 
 			ge.canvas.dispatchEvent(
@@ -325,6 +369,8 @@ export class GameEngine {
 				})
 			);
 
+			ge.summonParticles(this.#apple.x, this.#apple.y, this.#apple.color);
+
 			this.#summonApple();
 		}
 
@@ -332,8 +378,6 @@ export class GameEngine {
 	}
 
 	#drawScene(graphicEngine: GraphicEngine) {
-		graphicEngine.clearGameBoard();
-
 		this.#snake.forEach((segment) => {
 			graphicEngine.drawGameObject(segment);
 		});
@@ -344,8 +388,16 @@ export class GameEngine {
 	// Game events
 
 	#gameOver() {
+		this.#graphicEngine.summonParticles(
+			this.#snake[1].x,
+			this.#snake[1].y,
+			this.#snake[1].color
+		);
+
 		this.#graphicEngine.canvas.dispatchEvent(
-			new CustomEvent("gameover", { detail: { win: this.#score >= 98 } })
+			new CustomEvent("gameover", {
+				detail: { win: this.#score >= 98 },
+			})
 		);
 
 		this.#graphicEngine.gameState = State.Stop;
@@ -383,6 +435,8 @@ export class GameEngine {
 	}
 
 	changeDirection(desiredDirection: Direction) {
+		if (this.#graphicEngine.gameState === State.Stop) return;
+
 		switch (desiredDirection) {
 			case Direction.Right:
 				if (this.#oldDirection === Direction.Left) return;
@@ -396,8 +450,6 @@ export class GameEngine {
 			case Direction.Down:
 				if (this.#oldDirection === Direction.Up) return;
 				break;
-			default:
-				return;
 		}
 
 		this.#direction = desiredDirection;
@@ -431,6 +483,52 @@ class GameObject {
 		}
 	}
 }
+
+class Particle {
+	#x: number;
+	#y: number;
+	#size: number;
+	#speedX: number;
+	#speedY: number;
+	#speedShrink: number;
+	#color: string;
+
+	constructor(x: number, y: number, size: number, color: string) {
+		this.#x = x;
+		this.#y = y;
+		this.#size = Math.floor(size * 10) / 10;
+		this.#speedX = Math.random() * 4 - 2;
+		this.#speedY = Math.random() * 4 - 2;
+		this.#speedShrink = 0.225;
+		this.#color = color;
+	}
+
+	update(deltaTime: number) {
+		this.#x += this.#speedX * deltaTime;
+		this.#y += this.#speedY * deltaTime;
+		this.#size -= this.#speedShrink * deltaTime;
+	}
+
+	// Getters
+
+	get x() {
+		return this.#x;
+	}
+
+	get y() {
+		return this.#y;
+	}
+
+	get size() {
+		return this.#size;
+	}
+
+	get color() {
+		return this.#color;
+	}
+}
+
+// ---
 
 export enum Direction {
 	Up = "ArrowUp",
