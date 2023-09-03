@@ -435,6 +435,8 @@ export class GameEngine {
 	}
 
 	changeDirection(desiredDirection: Direction) {
+		if (this.#graphicEngine.gameState === State.Stop) return;
+
 		switch (desiredDirection) {
 			case Direction.Right:
 				if (this.#oldDirection === Direction.Left) return;
@@ -448,8 +450,6 @@ export class GameEngine {
 			case Direction.Down:
 				if (this.#oldDirection === Direction.Up) return;
 				break;
-			default:
-				return;
 		}
 
 		this.#direction = desiredDirection;
