@@ -25,7 +25,9 @@ html {
 body {
 	position: fixed;
 	inset: 0 0;
- overscroll-behaviour: contain;
+	overscroll-behavior: contain;
+
+	scroll-behavior: none;
 
 	background: var(--clr-neutral-1);
 
@@ -110,8 +112,11 @@ footer {
 
 /* --- */
 
+dialog {
+	overscroll-behavior: contain;
+}
+
 .game-dialog[open] {
- overscroll-behaviour: contain;
 	width: clamp(10rem, 80%, 20rem);
 	aspect-ratio: 1;
 	padding: 1.5rem;
@@ -129,7 +134,7 @@ footer {
 }
 
 .game-dialog::backdrop {
- overscroll-behaviour: contain;
+	overscroll-behavior: contain;
 	background: black;
 	opacity: 0.8;
 }
