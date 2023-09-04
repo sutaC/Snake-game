@@ -196,7 +196,7 @@ export class GraphicEngine {
 				y * (this.#cellSize + this.#gap);
 		for (let i = 0; i < 15; i++) {
 			this.#particles.push(
-				new Particle(posX, posY, this.#cellSize / 3, color)
+				new Particle(posX, posY, this.#cellSize / 3, color, this.#width)
 			);
 		}
 	}
@@ -541,13 +541,19 @@ class Particle {
 	#speedShrink: number;
 	#color: string;
 
-	constructor(x: number, y: number, size: number, color: string) {
+	constructor(
+		x: number,
+		y: number,
+		size: number,
+		color: string,
+		resolution: number
+	) {
 		this.#x = x;
 		this.#y = y;
 		this.#size = Math.floor(size * 10) / 10;
-		this.#speedX = Math.random() * 4 - 2;
-		this.#speedY = Math.random() * 4 - 2;
-		this.#speedShrink = 0.225;
+		this.#speedX = (Math.random() * size * 2 - size) / size;
+		this.#speedY = (Math.random() * size * 2 - size) / size;
+		this.#speedShrink = (size / resolution) * (2 + Math.random() * 10);
 		this.#color = color;
 	}
 
