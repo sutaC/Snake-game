@@ -15,6 +15,8 @@ export class GraphicEngine {
 	#gameStateActive = false;
 
 	#particles: Array<Particle> = [];
+	#assets: Array<{ name: string; imgSrc: string; img?: CanvasImageSource }> =
+		[];
 
 	#update: (graphicEngine: GraphicEngine, deltaTime: number) => void = (
 		ge: GraphicEngine,
@@ -73,17 +75,14 @@ export class GraphicEngine {
 		this.#ctx.closePath();
 	}
 
-	#drawImage(x: number, y: number, imgSrc: string) {
+	#drawImage(x: number, y: number, image: CanvasImageSource) {
 		if (!this.#ctx) {
 			throw new Error("Could not connect to the Context");
 		}
 
-		const img = new Image(this.#cellSize, this.#cellSize);
-		img.src = imgSrc;
-
 		this.#ctx.beginPath();
 
-		this.#ctx.drawImage(img, x, y, this.#cellSize, this.#cellSize);
+		this.#ctx.drawImage(image, x, y, this.#cellSize, this.#cellSize);
 
 		this.#ctx.closePath();
 	}
@@ -176,8 +175,11 @@ export class GraphicEngine {
 				this.#cellSize +
 				gameObject.y * (this.#cellSize + this.#gap);
 
-		if (gameObject.imgSrc.length > 0) {
-			this.#drawImage(posX, posY, gameObject.imgSrc);
+		const asset = this.#assets.find(
+			(asset) => asset.name === gameObject.name
+		)?.img;
+		if (asset) {
+			this.#drawImage(posX, posY, asset);
 		} else if (gameObject.color.length > 0) {
 			this.#drawRect(posX, posY, gameObject.color);
 		}
@@ -222,6 +224,23 @@ export class GraphicEngine {
 	) {
 		this.#update = update;
 	}
+
+	set assets(assets: Array<{ name: string; imgSrc: string }>) {
+		this.#assets = [];
+		assets.forEach((asset) => {
+			const img = new Image(this.#cellSize, this.#cellSize);
+			img.src = asset.imgSrc;
+
+			this.#assets.push({
+				name: asset.name,
+				imgSrc: asset.imgSrc,
+				img,
+			});
+		});
+	}
+	get assets() {
+		return this.#assets;
+	}
 }
 
 // Game
@@ -233,10 +252,10 @@ export class GameEngine {
 	#oldDirection: string = this.#direction;
 
 	#snake: Array<GameObject> = [
-		new GameObject(4, 5, "#0ff409", GameAssets.snakeHeadRight),
-		new GameObject(3, 5, "#0ff409", GameAssets.snakeTail),
+		new GameObject(4, 5, "#0ff409", GameAssetsNames.snakeHeadRight),
+		new GameObject(3, 5, "#0ff409", GameAssetsNames.snakeTail),
 	];
-	#apple = new GameObject(7, 5, "#f50a8b", GameAssets.apple);
+	#apple = new GameObject(7, 5, "#f50a8b", GameAssetsNames.apple);
 
 	#score = 0;
 
@@ -247,6 +266,34 @@ export class GameEngine {
 
 	constructor(graphicEngine: GraphicEngine) {
 		this.#graphicEngine = graphicEngine;
+
+		// Preload game assets
+		this.#graphicEngine.assets = [
+			{
+				name: GameAssetsNames.snakeHeadRight,
+				imgSrc: "docs/assets/snake-head-right.svg",
+			},
+			{
+				name: GameAssetsNames.snakeHeadDown,
+				imgSrc: "docs/assets/snake-head-down.svg",
+			},
+			{
+				name: GameAssetsNames.snakeHeadLeft,
+				imgSrc: "docs/assets/snake-head-left.svg",
+			},
+			{
+				name: GameAssetsNames.snakeHeadUp,
+				imgSrc: "docs/assets/snake-head-up.svg",
+			},
+			{
+				name: GameAssetsNames.snakeTail,
+				imgSrc: "docs/assets/snake-tail.svg",
+			},
+			{
+				name: GameAssetsNames.apple,
+				imgSrc: "docs/assets/apple.svg",
+			},
+		];
 
 		this.#graphicEngine.update = this.#update.bind(this);
 	}
@@ -278,21 +325,21 @@ export class GameEngine {
 		switch (this.#direction) {
 			case Direction.Right:
 				this.#snake[0].x++;
-				this.#snake[0].imgSrc = GameAssets.snakeHeadRight;
+				this.#snake[0].name = GameAssetsNames.snakeHeadRight;
 				break;
 			case Direction.Left:
 				this.#snake[0].x--;
-				this.#snake[0].imgSrc = GameAssets.snakeHeadLeft;
+				this.#snake[0].name = GameAssetsNames.snakeHeadLeft;
 
 				break;
 			case Direction.Up:
 				this.#snake[0].y--;
-				this.#snake[0].imgSrc = GameAssets.snakeHeadUp;
+				this.#snake[0].name = GameAssetsNames.snakeHeadUp;
 
 				break;
 			case Direction.Down:
 				this.#snake[0].y++;
-				this.#snake[0].imgSrc = GameAssets.snakeHeadDown;
+				this.#snake[0].name = GameAssetsNames.snakeHeadDown;
 
 				break;
 		}
@@ -303,7 +350,12 @@ export class GameEngine {
 		if (this.#grow) {
 			this.#snake = [
 				this.#snake[0],
-				new GameObject(prevX, prevY, "#0ff409", GameAssets.snakeTail),
+				new GameObject(
+					prevX,
+					prevY,
+					"#0ff409",
+					GameAssetsNames.snakeTail
+				),
 				...this.#snake.slice(1),
 			];
 
@@ -421,10 +473,10 @@ export class GameEngine {
 
 	reset() {
 		this.#snake = [
-			new GameObject(4, 5, "#0ff409", GameAssets.snakeHeadRight),
-			new GameObject(3, 5, "#0ff409", GameAssets.snakeTail),
+			new GameObject(4, 5, "#0ff409", GameAssetsNames.snakeHeadRight),
+			new GameObject(3, 5, "#0ff409", GameAssetsNames.snakeTail),
 		];
-		this.#apple = new GameObject(7, 5, "#f50a8b", GameAssets.apple);
+		this.#apple = new GameObject(7, 5, "#f50a8b", GameAssetsNames.apple);
 
 		this.#direction = Direction.Right;
 		this.#oldDirection = this.#direction;
@@ -463,19 +515,19 @@ export class GameEngine {
 // ---
 
 class GameObject {
-	imgSrc: string = "";
 	x: number;
 	y: number;
 	color = "white";
+	name: string = "";
 
-	constructor(x: number, y: number, color?: string, imgSrc?: string) {
+	constructor(x: number, y: number, color?: string, name?: string) {
 		this.x = x;
 		this.y = y;
 		if (color) {
 			this.color = color;
 		}
-		if (imgSrc) {
-			this.imgSrc = imgSrc;
+		if (name) {
+			this.name = name;
 		}
 	}
 }
@@ -526,18 +578,18 @@ class Particle {
 
 // ---
 
+enum GameAssetsNames {
+	snakeHeadRight = "snake-head-right",
+	snakeHeadDown = "snake-head-down",
+	snakeHeadLeft = "snake-head-left",
+	snakeHeadUp = "snake-head-up",
+	snakeTail = "snake-head-tail",
+	apple = "apple",
+}
+
 export enum Direction {
 	Up = "ArrowUp",
 	Right = "ArrowRight",
 	Down = "ArrowDown",
 	Left = "ArrowLeft",
-}
-
-enum GameAssets {
-	snakeHeadRight = "docs/assets/snake-head-right.svg",
-	snakeHeadDown = "docs/assets/snake-head-down.svg",
-	snakeHeadLeft = "docs/assets/snake-head-left.svg",
-	snakeHeadUp = "docs/assets/snake-head-up.svg",
-	snakeTail = "docs/assets/snake-tail.svg",
-	apple = "docs/assets/apple.svg",
 }

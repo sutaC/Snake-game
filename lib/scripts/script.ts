@@ -30,13 +30,39 @@ const renderingEngine = new GraphicEngine(canvas);
 const gameEngine = new GameEngine(renderingEngine);
 const swipeDetector = new SwipeDetector(document.body);
 
-// Modal illustrations
+// Modal illustrations preload
 
-enum Illustration {
-	win = "docs/assets/illustration-win.png",
-	pause = "docs/assets/illustration-pause.png",
-	lose = "docs/assets/illustration-lose.png",
+const preloadImage = (src: string, width?: number, height?: number) => {
+	const image = new Image();
+	image.src = src;
+	return image;
+};
+enum IllustrationNames {
+	win = "ill-win",
+	pause = "ill-pause",
+	lose = "ill-lose",
 }
+const illustrations: Array<{
+	name: string;
+	imgSrc: string;
+	img: CanvasImageSource;
+}> = [
+	{
+		name: IllustrationNames.win,
+		imgSrc: "docs/assets/illustration-win.png",
+		img: preloadImage("docs/assets/illustration-win.png"),
+	},
+	{
+		name: IllustrationNames.pause,
+		imgSrc: "docs/assets/illustration-pause.png",
+		img: preloadImage("docs/assets/illustration-pause.png"),
+	},
+	{
+		name: IllustrationNames.lose,
+		imgSrc: "docs/assets/illustration-lose.png",
+		img: preloadImage("docs/assets/illustration-lose.png"),
+	},
+];
 
 // Buttons
 
@@ -45,7 +71,9 @@ if (btnPause && dialog && imgIllustration && h2DialogHeader) {
 		gameEngine.gameStateActive = false;
 
 		h2DialogHeader.textContent = "Pause";
-		imgIllustration.src = Illustration.pause;
+		imgIllustration.src =
+			illustrations.find((ill) => ill.name === IllustrationNames.pause)
+				?.imgSrc ?? "";
 
 		dialog.showModal();
 	});
@@ -139,10 +167,14 @@ if (dialog && imgIllustration && h2DialogHeader) {
 		const { win } = event.detail;
 
 		if (win) {
-			imgIllustration.src = Illustration.win;
+			imgIllustration.src =
+				illustrations.find((ill) => ill.name === IllustrationNames.win)
+					?.imgSrc ?? "";
 			h2DialogHeader.textContent = "You Win!";
 		} else {
-			imgIllustration.src = Illustration.lose;
+			imgIllustration.src =
+				illustrations.find((ill) => ill.name === IllustrationNames.lose)
+					?.imgSrc ?? "";
 			h2DialogHeader.textContent = "You Lose!";
 		}
 
