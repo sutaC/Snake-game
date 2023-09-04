@@ -42,7 +42,7 @@ enum Illustration {
 
 if (btnPause && dialog && imgIllustration && h2DialogHeader) {
 	btnPause.addEventListener("click", () => {
-		gameEngine.pauseGame(true);
+		gameEngine.gameStateActive = false;
 
 		h2DialogHeader.textContent = "Pause";
 		imgIllustration.src = Illustration.pause;
@@ -52,7 +52,7 @@ if (btnPause && dialog && imgIllustration && h2DialogHeader) {
 }
 if (btnPlay && dialog) {
 	btnPlay.addEventListener("click", () => {
-		gameEngine.pauseGame(false);
+		gameEngine.gameStateActive = true;
 		dialog.close();
 		dialog.classList.remove("gameStart");
 	});

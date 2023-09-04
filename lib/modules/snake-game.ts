@@ -12,7 +12,7 @@ export class GraphicEngine {
 	#timer = 0;
 	#interval = 1000 / 60;
 
-	#gameState = State.Stop;
+	#gameStateActive = false;
 
 	#particles: Array<Particle> = [];
 
@@ -95,7 +95,7 @@ export class GraphicEngine {
 			throw new Error("Could not connect to the Context");
 		}
 
-		if (this.#gameState === State.Stop) {
+		if (!this.#gameStateActive) {
 			this.#timer = 0;
 			this.#lastTime = 0;
 			return 0;
@@ -205,12 +205,12 @@ export class GraphicEngine {
 		return this.#gameGrid;
 	}
 
-	set gameState(state: State) {
-		this.#gameState = state;
-		if (state === State.Playing) this.#render(0);
+	set gameStateActive(state: boolean) {
+		this.#gameStateActive = state;
+		if (state) this.#render(0);
 	}
-	get gameState() {
-		return this.#gameState;
+	get gameStateActive() {
+		return this.#gameStateActive;
 	}
 
 	get canvas() {
@@ -256,7 +256,7 @@ export class GameEngine {
 
 		this.#time += deltaTime;
 
-		if (this.#time >= 120 - this.#score / 2) {
+		if (this.#time >= 150 - this.#score * 0.5) {
 			this.#time = 0;
 
 			this.#snakeMovment();
@@ -400,7 +400,7 @@ export class GameEngine {
 			})
 		);
 
-		this.#graphicEngine.gameState = State.Stop;
+		this.#graphicEngine.gameStateActive = false;
 	}
 
 	#summonApple() {
@@ -431,11 +431,11 @@ export class GameEngine {
 
 		this.#score = 0;
 		// Starts game
-		this.#graphicEngine.gameState = State.Playing;
+		this.#graphicEngine.gameStateActive = true;
 	}
 
 	changeDirection(desiredDirection: Direction) {
-		if (this.#graphicEngine.gameState === State.Stop) return;
+		if (!this.#graphicEngine.gameStateActive) return;
 
 		switch (desiredDirection) {
 			case Direction.Right:
@@ -455,12 +455,8 @@ export class GameEngine {
 		this.#direction = desiredDirection;
 	}
 
-	pauseGame(pause: boolean) {
-		if (pause) {
-			this.#graphicEngine.gameState = State.Stop;
-		} else {
-			this.#graphicEngine.gameState = State.Playing;
-		}
+	set gameStateActive(state: boolean) {
+		this.#graphicEngine.gameStateActive = state;
 	}
 }
 
@@ -535,11 +531,6 @@ export enum Direction {
 	Right = "ArrowRight",
 	Down = "ArrowDown",
 	Left = "ArrowLeft",
-}
-
-enum State {
-	Playing,
-	Stop,
 }
 
 enum GameAssets {
