@@ -263,6 +263,7 @@ export class GameEngine {
 
 	#time = 0;
 	#grow = false;
+	#snakeStateActive = true;
 
 	constructor(graphicEngine: GraphicEngine) {
 		this.#graphicEngine = graphicEngine;
@@ -303,7 +304,7 @@ export class GameEngine {
 
 		this.#time += deltaTime;
 
-		if (this.#time >= 150 - this.#score * 0.5) {
+		if (this.#time >= 150 - this.#score * 0.75 && this.#snakeStateActive) {
 			this.#time = 0;
 
 			this.#snakeMovment();
@@ -439,20 +440,27 @@ export class GameEngine {
 
 	// Game events
 
-	#gameOver() {
-		this.#graphicEngine.summonParticles(
-			this.#snake[1].x,
-			this.#snake[1].y,
-			this.#snake[1].color
-		);
+	async #gameOver() {
+		this.#snakeStateActive = false;
 
-		this.#graphicEngine.canvas.dispatchEvent(
-			new CustomEvent("gameover", {
-				detail: { win: this.#score >= 98 },
-			})
-		);
+		for (let i = 0; i < this.#snake.length; i++) {
+			this.#graphicEngine.summonParticles(
+				this.#snake[i].x,
+				this.#snake[i].y,
+				this.#snake[i].color
+			);
 
-		this.#graphicEngine.gameStateActive = false;
+			delete this.#snake[i];
+		}
+
+		setTimeout(() => {
+			this.#graphicEngine.canvas.dispatchEvent(
+				new CustomEvent("gameover", {
+					detail: { win: this.#score >= 98 },
+				})
+			);
+			this.#graphicEngine.gameStateActive = false;
+		}, 2000);
 	}
 
 	#summonApple() {
@@ -481,6 +489,7 @@ export class GameEngine {
 		this.#direction = Direction.Right;
 		this.#oldDirection = this.#direction;
 
+		this.#snakeStateActive = true;
 		this.#score = 0;
 		// Starts game
 		this.#graphicEngine.gameStateActive = true;
