@@ -1,7 +1,11 @@
 {
 	"name": "Snake",
 	"short_name": "Snake",
-	"start_url": "https://sutac.github.io/Snake-game/",
+	"start_url": "/Snake-game",
+	"display": "standalone",
+	"background_color": "#FFFFFF",
+	"theme_color": "#000000",
+	"orientation": "portrait",
 	"icons": [
 		{
 			"src": "./docs/assets/manifest-icon-192.maskable.png",
@@ -27,10 +31,5 @@
 			"type": "image/png",
 			"purpose": "maskable"
 		}
-	],
-	"theme_background": "#000000",
-	"theme_color": "#000000",
-	"background_color": "#FFFFFF",
-	"display": "standalone",
-	"orientation": "portrait"
+	]
 }
