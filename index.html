@@ -8,15 +8,11 @@
     <link rel="shortcut icon" href="docs/assets/logo.png" type="image/x-icon">
     <title>Snake</title>
 
-    <link rel="stylesheet" href="./lib/style/style.css">
-    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="lib/style/style.css">
+    <link rel="manifest" href="manifest.json">
 
-    <script type="module" src="./lib/scripts/script.js" defer></script>
-    <script>
-        if ('serviceworker' in navigator) {
-            navigator.serviceWorker.register("./lib/scripts/service-worker.js")
-        }
-    </script>
+    <script type="module" src="lib/scripts/script.js" defer></script>
+    <script src="lib/scripts/app.js" async defer type="module"></script>
 </head>
 
 <body>
