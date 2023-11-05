@@ -1,3 +1,5 @@
+export {};
+
 if ("serviceWorker" in navigator) {
-	navigator.serviceWorker.register("sw.js");
+	await navigator.serviceWorker.register("sw.js");
 }
