@@ -1,34 +1,41 @@
 "use strict";
 const stataicCacheName = "site-static";
 const dynamicCacheName = "site-dynamic";
-const fallbackName = "/docs/pages/fallback.html";
+const fallbackName = "./docs/pages/fallback.html";
 const assets = [
     fallbackName,
-    "/",
-    "/index.html",
-    "/lib/style/style.css",
+    "./",
+    "./index.html",
+    "./lib/style/style.css",
     "https://fonts.googleapis.com/css2?family=Offside&display=swap",
-    "/lib/scripts/script.js",
-    "/lib/scripts/app.js",
-    "/lib/modules/swipe-detector.js",
-    "/lib/modules/snake-game.js",
-    "/docs/assets/illustration-win.png",
-    "/docs/assets/illustration-pause.png",
-    "/docs/assets/illustration-lose.png",
-    "/docs/assets/logo.png",
-    "/docs/assets/snake-head-down.svg",
-    "/docs/assets/snake-head-left.svg",
-    "/docs/assets/snake-head-right.svg",
-    "/docs/assets/snake-head-up.svg",
-    "/docs/assets/snake-tail.svg",
-    "/docs/assets/apple.svg",
-    "/docs/assets/icon-pause.svg",
-    "/docs/assets/icon-play.svg",
-    "/docs/assets/icon-reset.svg",
+    "./lib/scripts/script.js",
+    "./lib/scripts/app.js",
+    "./lib/modules/swipe-detector.js",
+    "./lib/modules/snake-game.js",
+    "./docs/assets/illustration-win.png",
+    "./docs/assets/illustration-pause.png",
+    "./docs/assets/illustration-lose.png",
+    "./docs/assets/logo.png",
+    "./docs/assets/snake-head-down.svg",
+    "./docs/assets/snake-head-left.svg",
+    "./docs/assets/snake-head-right.svg",
+    "./docs/assets/snake-head-up.svg",
+    "./docs/assets/snake-tail.svg",
+    "./docs/assets/apple.svg",
+    "./docs/assets/icon-pause.svg",
+    "./docs/assets/icon-play.svg",
+    "./docs/assets/icon-reset.svg",
 ];
 async function cacheStatic() {
     const cache = await caches.open(stataicCacheName);
-    await cache.addAll(assets);
+    assets.forEach(async (asset) => {
+        try {
+            await cache.add(asset);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    });
 }
 async function deleteCache() {
     const keys = await caches.keys();
