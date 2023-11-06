@@ -27,8 +27,12 @@ const assets = [
 ];
 
 async function cacheStatic(): Promise<void> {
-	const cache = await caches.open(stataicCacheName);
-	await cache.addAll(assets);
+	try {
+		const cache = await caches.open(stataicCacheName);
+		await cache.addAll(assets);
+	} catch (error) {
+		console.error(error);
+	}
 }
 
 async function deleteCache(): Promise<void> {
