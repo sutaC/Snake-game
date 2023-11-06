@@ -27,8 +27,13 @@ const assets = [
     "/docs/assets/icon-reset.svg",
 ];
 async function cacheStatic() {
-    const cache = await caches.open(stataicCacheName);
-    await cache.addAll(assets);
+    try {
+        const cache = await caches.open(stataicCacheName);
+        await cache.addAll(assets);
+    }
+    catch (error) {
+        console.error(error);
+    }
 }
 async function deleteCache() {
     const keys = await caches.keys();
