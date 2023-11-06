@@ -27,13 +27,8 @@ const assets = [
     "/docs/assets/icon-reset.svg",
 ];
 async function cacheStatic() {
-    try {
-        const cache = await caches.open(stataicCacheName);
-        await cache.addAll(assets);
-    }
-    catch (error) {
-        console.error(error);
-    }
+    const cache = await caches.open(stataicCacheName);
+    await cache.addAll(assets);
 }
 async function deleteCache() {
     const keys = await caches.keys();
@@ -84,11 +79,26 @@ async function handleRespond(req) {
 }
 // ---
 self.addEventListener("install", (event) => {
-    event.waitUntil(cacheStatic());
+    try {
+        event.waitUntil(cacheStatic());
+    }
+    catch (error) {
+        console.error(error);
+    }
 });
 self.addEventListener("activate", (event) => {
-    event.waitUntil(deleteCache());
+    try {
+        event.waitUntil(deleteCache());
+    }
+    catch (error) {
+        console.error(error);
+    }
 });
 self.addEventListener("fetch", (event) => {
-    event.respondWith(handleRespond(event.request));
+    try {
+        event.respondWith(handleRespond(event.request));
+    }
+    catch (error) {
+        console.error(error);
+    }
 });
