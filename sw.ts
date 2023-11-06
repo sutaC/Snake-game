@@ -27,12 +27,8 @@ const assets = [
 ];
 
 async function cacheStatic(): Promise<void> {
-	try {
-		const cache = await caches.open(stataicCacheName);
-		await cache.addAll(assets);
-	} catch (error) {
-		console.error(error);
-	}
+	const cache = await caches.open(stataicCacheName);
+	await cache.addAll(assets);
 }
 
 async function deleteCache(): Promise<void> {
@@ -90,13 +86,25 @@ async function handleRespond(req: Request): Promise<Response | null> {
 // ---
 
 self.addEventListener("install", (event: any) => {
-	event.waitUntil(cacheStatic());
+	try {
+		event.waitUntil(cacheStatic());
+	} catch (error) {
+		console.error(error);
+	}
 });
 
 self.addEventListener("activate", (event: any) => {
-	event.waitUntil(deleteCache());
+	try {
+		event.waitUntil(deleteCache());
+	} catch (error) {
+		console.error(error);
+	}
 });
 
 self.addEventListener("fetch", (event: any) => {
-	event.respondWith(handleRespond(event.request));
+	try {
+		event.respondWith(handleRespond(event.request));
+	} catch (error) {
+		console.error(error);
+	}
 });
