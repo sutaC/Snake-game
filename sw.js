@@ -1,5 +1,5 @@
 "use strict";
-const stataicCacheName = "site-static";
+const stataicCacheName = "site-static-1";
 const dynamicCacheName = "site-dynamic";
 const fallbackName = "./docs/pages/fallback.html";
 const assets = [
