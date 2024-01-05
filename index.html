@@ -1,53 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#000000" />
+        <link
+            rel="shortcut icon"
+            href="docs/assets/icon-48x48.png"
+            type="image/x-icon"
+        />
+        <title>Snake</title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#000000">
-    <link rel="shortcut icon" href="docs/assets/logo.png" type="image/x-icon">
-    <title>Snake</title>
+        <link rel="stylesheet" href="lib/style/style.css" />
+        <link rel="manifest" href="manifest.json" />
 
-    <link rel="stylesheet" href="lib/style/style.css">
-    <link rel="manifest" href="manifest.json">
+        <script type="module" src="lib/scripts/script.js" defer></script>
+        <script src="lib/scripts/app.js" async defer type="module"></script>
+    </head>
 
-    <script type="module" src="lib/scripts/script.js" defer></script>
-    <script src="lib/scripts/app.js" async defer type="module"></script>
-</head>
+    <body>
+        <header>
+            <h1>Snake Game</h1>
+        </header>
 
-<body>
+        <main>
+            <div class="game-controlls">
+                <div class="game-score">
+                    <p id="score">Score 0</p>
+                    <p id="best-score">Best Score 0</p>
+                </div>
 
-    <header>
-        <h1>Snake Game</h1>
-    </header>
-
-    <main>
-
-        <div class="game-controlls">
-            <div class="game-score">
-                <p id="score">Score 0</p>
-                <p id="best-score">Best Score 0</p>
+                <button id="btn-pause">
+                    <img src="docs/assets/icon-pause.svg" alt="pause" />
+                </button>
             </div>
 
-            <button id="btn-pause"><img src="docs/assets/icon-pause.svg" alt="pause"></button>
-        </div>
+            <canvas id="game" width="500px" height="500px"></canvas>
 
-        <canvas id="game" width="500px" height="500px"></canvas>
+            <dialog id="game-dialog" class="game-dialog">
+                <h2 id="dialogHeader">Play!</h2>
+                <img
+                    src="docs/assets/illustration-pause.png"
+                    alt="game state illustration"
+                    id="illustration"
+                />
+                <div class="button-wrap">
+                    <button id="btn-reset">
+                        <img src="docs/assets/icon-reset.svg" alt="reset" />
+                    </button>
+                    <button id="btn-play">
+                        <img src="docs/assets/icon-play.svg" alt="play" />
+                    </button>
+                </div>
+            </dialog>
+        </main>
 
-        <dialog id="game-dialog" class="game-dialog">
-            <h2 id="dialogHeader">Play!</h2>
-            <img src="docs/assets/illustration-pause.png" alt="game state illustration" id="illustration">
-            <div class="button-wrap">
-                <button id="btn-reset"><img src="docs/assets/icon-reset.svg" alt="reset"></button>
-                <button id="btn-play"><img src="docs/assets/icon-play.svg" alt="play"></button>
-            </div>
-        </dialog>
-    </main>
-
-    <footer>
-        <p>Copyright © 2023 Antoni Siekański</p>
-    </footer>
-
-</body>
-
+        <footer>
+            <p>Copyright © 2023 Antoni Siekański</p>
+        </footer>
+    </body>
 </html>

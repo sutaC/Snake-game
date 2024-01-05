@@ -1,13 +1,13 @@
 {
-	"name": "snake-game",
-	"version": "1.0.0",
-	"description": "",
-	"main": "script.js",
-	"scripts": {
-		"build": "tsc",
-		"dev": "tsc -w"
-	},
-	"keywords": [],
-	"author": "Catus",
-	"license": "ISC"
+    "name": "snake-game",
+    "version": "1.0.0",
+    "description": "",
+    "main": "script.js",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc -w"
+    },
+    "keywords": [],
+    "author": "sutaC",
+    "license": "ISC"
 }
