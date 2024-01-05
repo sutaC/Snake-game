@@ -3,193 +3,193 @@
 @import url("https://fonts.googleapis.com/css2?family=Offside&display=swap");
 
 :root {
-	--clr-primary: #0ff409;
-	--clr-secondary-1: #4322f5;
-	--clr-secondary-2: #f50a8b;
-	--clr-neutral-1: #050506;
-	--clr-neutral-2: #1b182d;
-	--clr-neutral-3: #d4d0ec;
+    --clr-primary: #0ff409;
+    --clr-secondary-1: #4322f5;
+    --clr-secondary-2: #f50a8b;
+    --clr-neutral-1: #050506;
+    --clr-neutral-2: #1b182d;
+    --clr-neutral-3: #d4d0ec;
 }
 
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
-	font-family: "Offside", sans-serif;
-	color: var(--clr-primary);
+    font-family: "Offside", sans-serif;
+    color: var(--clr-primary);
 }
 
 /* Styles */
 
 body {
-	position: fixed;
-	inset: 0 0;
-	overscroll-behavior: contain;
+    position: fixed;
+    inset: 0 0;
+    overscroll-behavior: contain;
 
-	scroll-behavior: none;
+    scroll-behavior: none;
 
-	background: var(--clr-neutral-1);
+    background: var(--clr-neutral-1);
 
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
 
-	margin: 0;
-	padding: 2rem 1rem;
-	padding-top: 0;
-	height: 100vh;
+    margin: 0;
+    padding: 2rem 1rem;
+    padding-top: 0;
+    height: 100vh;
 }
 
 h1 {
-	font-size: 1.8rem;
+    font-size: 1.8rem;
 }
 h2 {
-	font-size: 1.6rem;
+    font-size: 1.6rem;
 }
 p {
-	margin: 0;
+    margin: 0;
 }
 h1,
 h2,
 p {
-	filter: drop-shadow(0 0 3px currentColor);
+    filter: drop-shadow(0 0 3px currentColor);
 }
 
 button {
-	width: 4em;
-	aspect-ratio: 1;
-	display: grid;
-	place-content: center;
+    width: 4em;
+    aspect-ratio: 1;
+    display: grid;
+    place-content: center;
 
-	border: 2px solid var(--clr-secondary-2);
-	border-radius: 0.5rem;
+    border: 2px solid var(--clr-secondary-2);
+    border-radius: 0.5rem;
 
-	font-weight: bold;
-	background-color: transparent;
-	color: var(--clr-secondary-2);
-	filter: drop-shadow(0 0 3px currentColor);
+    font-weight: bold;
+    background-color: transparent;
+    color: var(--clr-secondary-2);
+    filter: drop-shadow(0 0 3px currentColor);
 }
 
 /* --- */
 
 main {
-	width: clamp(10rem, 100%, 30rem);
-	position: relative;
+    width: clamp(10rem, 100%, 30rem);
+    position: relative;
 }
 
 .game-controlls {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .game-score {
-	display: flex;
-	justify-content: space-between;
-	flex-direction: column;
-	gap: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 #game {
-	width: clamp(10rem, 100%, 30rem);
-	aspect-ratio: 1;
-	margin: 1rem 0;
+    width: clamp(10rem, 100%, 30rem);
+    aspect-ratio: 1;
+    margin: 1rem 0;
 
-	border: 3px solid var(--clr-secondary-1);
-	border-radius: 0.5rem;
-	box-shadow: 0 0 15px 1px var(--clr-secondary-1);
+    border: 3px solid var(--clr-secondary-1);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px 1px var(--clr-secondary-1);
 
-	background-color: var(--clr-neutral-1);
+    background-color: var(--clr-neutral-1);
 }
 
 footer {
-	color: var(--clr-secondary-1);
-	opacity: 0.7;
-	font-size: 0.7rem;
+    color: var(--clr-secondary-1);
+    opacity: 0.7;
+    font-size: 0.8rem;
 }
 
 /* --- */
 
 dialog {
-	overscroll-behavior: contain;
+    overscroll-behavior: contain;
 }
 
 .game-dialog[open] {
-	width: clamp(10rem, 80%, 20rem);
-	aspect-ratio: 1;
-	padding: 1.5rem;
+    width: clamp(10rem, 80%, 20rem);
+    aspect-ratio: 1;
+    padding: 1.5rem;
 
-	border: 3px solid var(--clr-neutral-3);
-	border-radius: 0.5rem;
-	box-shadow: 0 0 15px 1px var(--clr-neutral-3);
+    border: 3px solid var(--clr-neutral-3);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px 1px var(--clr-neutral-3);
 
-	background: var(--clr-neutral-1);
+    background: var(--clr-neutral-1);
 
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
 }
 
 .game-dialog::backdrop {
-	overscroll-behavior: contain;
-	background: black;
-	opacity: 0.8;
+    overscroll-behavior: contain;
+    background: black;
+    opacity: 0.8;
 }
 
 .game-dialog h2 {
-	color: var(--clr-primary);
-	margin: 0;
+    color: var(--clr-primary);
+    margin: 0;
 }
 
 .game-dialog #illustration {
-	width: clamp(5rem, 50%, 20rem);
-	aspect-ratio: 1;
+    width: clamp(5rem, 50%, 20rem);
+    aspect-ratio: 1;
 
-	border: 3px solid var(--clr-secondary-1);
-	border-radius: 0.5rem;
-	box-shadow: 0 0 15px 1px var(--clr-secondary-1);
+    border: 3px solid var(--clr-secondary-1);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px 1px var(--clr-secondary-1);
 
-	background-color: var(--clr-neutral-2);
+    background-color: var(--clr-neutral-2);
 }
 
 .game-dialog .button-wrap {
-	width: 70%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 30%;
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30%;
 }
 
 .gameOver #btn-play {
-	display: none;
+    display: none;
 }
 
 .gameStart #btn-reset {
-	display: none;
+    display: none;
 }
 
 /* Desktop */
 
 @media (width >= 1000px) {
-	.game-controlls {
-		position: absolute;
-		left: -2rem;
-		top: 1rem;
-		translate: -100%;
+    .game-controlls {
+        position: absolute;
+        left: -2rem;
+        top: 1rem;
+        translate: -100%;
 
-		flex-direction: column-reverse;
-		gap: 1rem;
-	}
+        flex-direction: column-reverse;
+        gap: 1rem;
+    }
 
-	.game-score {
-		flex-direction: row-reverse;
-		gap: 1.5em;
-	}
-	.game-score > p {
-		width: 1ch;
-		word-break: break-all;
-	}
+    .game-score {
+        flex-direction: row-reverse;
+        gap: 1.5em;
+    }
+    .game-score > p {
+        width: 1ch;
+        word-break: break-all;
+    }
 }
