@@ -20,6 +20,26 @@ html {
     color: var(--clr-primary);
 }
 
+/* Animations */
+
+@keyframes slide-in {
+    0% {
+        translate: 0 -5%;
+    }
+    100% {
+        translate: 0 0;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 /* Styles */
 
 body {
@@ -131,12 +151,18 @@ dialog {
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
+
+    animation: slide-in 0.2s ease-in, fade-in 0.2s ease-in;
 }
 
 .game-dialog::backdrop {
     overscroll-behavior: contain;
     background: black;
     opacity: 0.8;
+}
+
+.game-dialog[open]::backdrop {
+    animation: fade-in 0.2s ease-in;
 }
 
 .game-dialog h2 {
