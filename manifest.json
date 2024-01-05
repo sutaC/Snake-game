@@ -1,7 +1,7 @@
 {
     "name": "Snake",
     "short_name": "Snake",
-    "start_url": "/Snake-game",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#050506",
     "theme_color": "#1b182d",

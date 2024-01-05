@@ -58,6 +58,16 @@ async function limitCacheSize(name: string, size: number): Promise<void> {
     await limitCacheSize(name, size);
 }
 
+async function updateCache(req: Request) {
+    try {
+        const cache = await caches.open(stataicCacheName);
+        const res = await fetch(req);
+        await cache.put(req, res);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 async function handleRespond(req: Request): Promise<Response | null> {
     let cacheRes;
     try {
@@ -66,7 +76,10 @@ async function handleRespond(req: Request): Promise<Response | null> {
         console.error(error);
     }
 
-    if (cacheRes) return cacheRes;
+    if (cacheRes) {
+        await updateCache(req);
+        return cacheRes;
+    }
 
     let fetchRes;
     try {
@@ -88,7 +101,7 @@ async function handleRespond(req: Request): Promise<Response | null> {
         if (fallback) return fallback;
     }
 
-    return null;
+    return Response.error();
 }
 
 // ---
