@@ -77,8 +77,18 @@ p {
     filter: drop-shadow(0 0 3px currentColor);
 }
 
-a {
+a,
+a:visited {
     color: var(--clr-secondary-1);
+}
+
+a:hover,
+a:focus {
+    opacity: 0.9;
+}
+
+a:active {
+    opacity: 0.7;
 }
 
 img {
