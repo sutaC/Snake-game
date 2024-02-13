@@ -32,7 +32,16 @@ const assets = [
     "./docs/audio/snake-turn.mp3",
 ];
 
+async function removeAllCache(): Promise<void> {
+    const keys = await caches.keys();
+    keys.forEach(async (key) => {
+        await caches.delete(key);
+    });
+}
+
 async function cacheStatic(): Promise<void> {
+    await removeAllCache();
+
     const cache = await caches.open(stataicCacheName);
     assets.forEach(async (asset) => {
         try {
