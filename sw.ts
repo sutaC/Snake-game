@@ -26,6 +26,10 @@ const assets = [
     "./docs/assets/icon-pause.svg",
     "./docs/assets/icon-play.svg",
     "./docs/assets/icon-reset.svg",
+    "./docs/audio/snake-dead.mp3",
+    "./docs/audio/snake-eat.mp3",
+    "./docs/audio/snake-grow.mp3",
+    "./docs/audio/snake-turn.mp3",
 ];
 
 async function cacheStatic(): Promise<void> {
