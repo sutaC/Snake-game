@@ -47,7 +47,7 @@ async function cacheStatic(): Promise<void> {
         try {
             await cache.add(asset);
         } catch (error) {
-            console.error(error);
+            console.error(error, asset);
         }
     });
 }
@@ -77,7 +77,7 @@ async function updateCache(req: Request) {
         const res = await fetch(req);
         await cache.put(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error, req);
     }
 }
 
@@ -86,7 +86,7 @@ async function handleRespond(req: Request): Promise<Response | null> {
     try {
         cacheRes = (await caches.match(req)) as Response;
     } catch (error) {
-        console.error(error);
+        console.error(error, req);
     }
 
     if (cacheRes) {
@@ -98,7 +98,7 @@ async function handleRespond(req: Request): Promise<Response | null> {
     try {
         fetchRes = await fetch(req);
     } catch (error) {
-        console.error(error);
+        console.error(error, req);
     }
 
     if (fetchRes) {
@@ -120,25 +120,13 @@ async function handleRespond(req: Request): Promise<Response | null> {
 // ---
 
 self.addEventListener("install", (event: any) => {
-    try {
-        event.waitUntil(cacheStatic());
-    } catch (error) {
-        console.error(error);
-    }
+    event.waitUntil(cacheStatic());
 });
 
 self.addEventListener("activate", (event: any) => {
-    try {
-        event.waitUntil(deleteCache());
-    } catch (error) {
-        console.error(error);
-    }
+    event.waitUntil(deleteCache());
 });
 
 self.addEventListener("fetch", (event: any) => {
-    try {
-        event.respondWith(handleRespond(event.request));
-    } catch (error) {
-        console.error(error);
-    }
+    event.respondWith(handleRespond(event.request));
 });
