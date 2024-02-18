@@ -1,132 +1,126 @@
-const stataicCacheName = "site-static";
-const dynamicCacheName = "site-dynamic";
-const fallbackName = "./docs/pages/fallback.html";
+const cacheNameStatic = "app-cache-static";
+const cacheNameDynamic = "app-cache-dynamic";
 const assets = [
-    fallbackName,
-    "./",
-    "./index.html",
-    "./lib/style/style.css",
+    "/",
+    "/manifest.json",
+    "/index.html",
+    "/lib/style/style.css",
     "https://fonts.googleapis.com/css2?family=Offside&display=swap",
-    "./lib/scripts/script.js",
-    "./lib/scripts/app.js",
-    "./lib/modules/swipe-detector.js",
-    "./lib/modules/snake-game.js",
-    "./docs/assets/illustration-win.png",
-    "./docs/assets/illustration-pause.png",
-    "./docs/assets/illustration-lose.png",
-    "./docs/assets/icon-48x48.png",
-    "./docs/assets/icon-128x128.png",
-    "./docs/assets/icon-512x512.png",
-    "./docs/assets/snake-head-down.svg",
-    "./docs/assets/snake-head-left.svg",
-    "./docs/assets/snake-head-right.svg",
-    "./docs/assets/snake-head-up.svg",
-    "./docs/assets/snake-tail.svg",
-    "./docs/assets/apple.svg",
-    "./docs/assets/icon-pause.svg",
-    "./docs/assets/icon-play.svg",
-    "./docs/assets/icon-reset.svg",
-    "./docs/audio/snake-dead.mp3",
-    "./docs/audio/snake-eat.mp3",
-    "./docs/audio/snake-grow.mp3",
-    "./docs/audio/snake-turn.mp3",
+    "/lib/scripts/script.js",
+    "/lib/scripts/app.js",
+    "/lib/modules/swipe-detector.js",
+    "/lib/modules/snake-game.js",
+    "/docs/assets/illustration-win.png",
+    "/docs/assets/illustration-pause.png",
+    "/docs/assets/illustration-lose.png",
+    "/docs/assets/icon-48x48.png",
+    "/docs/assets/icon-128x128.png",
+    "/docs/assets/icon-512x512.png",
+    "/docs/assets/snake-head-down.svg",
+    "/docs/assets/snake-head-left.svg",
+    "/docs/assets/snake-head-right.svg",
+    "/docs/assets/snake-head-up.svg",
+    "/docs/assets/snake-tail.svg",
+    "/docs/assets/apple.svg",
+    "/docs/assets/icon-pause.svg",
+    "/docs/assets/icon-play.svg",
+    "/docs/assets/icon-reset.svg",
+    "/docs/audio/snake-dead.mp3",
+    "/docs/audio/snake-eat.mp3",
+    "/docs/audio/snake-grow.mp3",
+    "/docs/audio/snake-turn.mp3",
 ];
 
-async function removeAllCache(): Promise<void> {
-    const keys = await caches.keys();
-    keys.forEach(async (key) => {
-        await caches.delete(key);
+// Functions
+async function resizeCache(cacheName: string, size: number) {
+    const cache = await caches.open(cacheName);
+    const keys = await cache.keys();
+
+    if (keys.length <= size) return;
+
+    for (let i = 0; i < size - keys.length; i++) {
+        await cache.delete(keys[i]);
+    }
+}
+
+async function updateCache(request: Request) {
+    let fRes: Response | undefined;
+    try {
+        fRes = await fetch(request);
+    } catch (error) {}
+
+    if (!fRes || !fRes?.ok) return;
+
+    const cache = await caches.open(cacheNameStatic);
+    await cache.delete(request);
+    await cache.put(request, fRes.clone());
+}
+
+// Handlers
+async function handleInstall() {
+    // Delete old cache
+    await caches.delete(cacheNameStatic);
+
+    // Installs stataic cache
+    const cache = await caches.open(cacheNameStatic);
+    assets.forEach(async (asset) => {
+        await cache.add(asset);
     });
 }
 
-async function cacheStatic(): Promise<void> {
-    await removeAllCache();
+async function handleActivate() {
+    // Deletes unwanted data
+    const keys = await caches.keys();
 
-    const cache = await caches.open(stataicCacheName);
-    assets.forEach(async (asset) => {
-        try {
-            await cache.add(asset);
-        } catch (error) {
-            console.error(error, asset);
+    keys.forEach(async (key) => {
+        if (key !== cacheNameStatic) {
+            await caches.delete(key);
         }
     });
 }
 
-async function deleteCache(): Promise<void> {
-    const keys = await caches.keys();
-    keys.forEach((key) => {
-        if (key != stataicCacheName) caches.delete(key);
-    });
-}
+async function handleFetch(request: Request): Promise<Response> {
+    const cRes = await caches.match(request);
 
-async function limitCacheSize(name: string, size: number): Promise<void> {
-    const cache = await caches.open(name);
-    const keys = await cache.keys();
-
-    if (keys.length <= size || keys.length === 0) {
-        return;
+    if (cRes) {
+        updateCache(request);
+        return cRes;
     }
 
-    await cache.delete(keys[0]);
-    await limitCacheSize(name, size);
-}
-
-async function updateCache(req: Request) {
+    // Add data to dynamic cache
+    let fRes: Response | undefined;
     try {
-        const cache = await caches.open(stataicCacheName);
-        const res = await fetch(req);
-        await cache.put(req, res);
+        fRes = await fetch(request);
+        await (async () => {
+            if (!fRes.ok) return;
+            if (fRes.status === 206) return;
+
+            const cacheS = await caches.open(cacheNameStatic);
+            if (await cacheS.match(request)) return;
+
+            const cacheD = await caches.open(cacheNameDynamic);
+            await cacheD.put(request, fRes.clone());
+        })();
     } catch (error) {
-        console.error(error, req);
+        console.error("Unable to put response into dynamic cache: ", error);
+    } finally {
+        return fRes || Response.error();
     }
 }
 
-async function handleRespond(req: Request): Promise<Response | null> {
-    let cacheRes;
-    try {
-        cacheRes = (await caches.match(req)) as Response;
-    } catch (error) {
-        console.error(error, req);
-    }
-
-    if (cacheRes) {
-        await updateCache(req);
-        return cacheRes;
-    }
-
-    let fetchRes;
-    try {
-        fetchRes = await fetch(req);
-    } catch (error) {
-        console.error(error, req);
-    }
-
-    if (fetchRes) {
-        const cache = await caches.open(dynamicCacheName);
-        cache.put(req, fetchRes.clone());
-        await limitCacheSize(dynamicCacheName, 15);
-        return fetchRes;
-    }
-
-    // Handle no cache & no connection
-    if (req.url.endsWith(".html")) {
-        const fallback = await caches.match(fallbackName);
-        if (fallback) return fallback;
-    }
-
-    return Response.error();
-}
-
-// ---
+// Setup
 
 self.addEventListener("install", (event: any) => {
-    event.waitUntil(cacheStatic());
+    event.waitUntil(handleInstall());
+    console.log("Service worker installed");
 });
 
 self.addEventListener("activate", (event: any) => {
-    event.waitUntil(deleteCache());
+    event.waitUntil(handleActivate());
+    console.log("Service worker activated");
 });
 
 self.addEventListener("fetch", (event: any) => {
-    event.respondWith(handleRespond(event.request));
+    event.respondWith(handleFetch(event.request));
+    resizeCache(cacheNameDynamic, 20);
 });
