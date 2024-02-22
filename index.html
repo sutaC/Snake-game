@@ -36,7 +36,10 @@
                 </div>
 
                 <button id="btn-pause">
-                    <img src="docs/assets/icon-pause.svg" alt="pause" />
+                    <i
+                        class="icon"
+                        style="--_icon: url(/docs/assets/icon-pause.svg)"
+                    ></i>
                 </button>
             </div>
 
@@ -51,10 +54,34 @@
                 />
                 <div class="button-wrap">
                     <button id="btn-reset">
-                        <img src="docs/assets/icon-reset.svg" alt="reset" />
+                        <i
+                            class="icon"
+                            style="--_icon: url(/docs/assets/icon-reset.svg)"
+                        ></i>
                     </button>
+                    <div class="chField">
+                        <input
+                            type="checkbox"
+                            name="soundEnabled"
+                            id="inpSoundEnabled"
+                            checked
+                        />
+                        <label for="inpSoundEnabled"
+                            ><i
+                                id="iSoundEnabled"
+                                class="icon"
+                                style="
+                                    --_icon: url(/docs/assets/icon-sound-enabled.svg);
+                                "
+                            ></i
+                        ></label>
+                    </div>
+
                     <button id="btn-play">
-                        <img src="docs/assets/icon-play.svg" alt="play" />
+                        <i
+                            class="icon"
+                            style="--_icon: url(/docs/assets/icon-play.svg)"
+                        ></i>
                     </button>
                 </div>
             </dialog>

@@ -24,6 +24,8 @@ const assets = [
     "/docs/assets/apple.svg",
     "/docs/assets/icon-pause.svg",
     "/docs/assets/icon-play.svg",
+    "/docs/assets/icon-sound-enabled.svg",
+    "/docs/assets/icon-sound-disabled.svg",
     "/docs/assets/icon-reset.svg",
     "/docs/audio/snake-dead.mp3",
     "/docs/audio/snake-eat.mp3",
