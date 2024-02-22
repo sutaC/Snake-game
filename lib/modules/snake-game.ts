@@ -276,6 +276,7 @@ export class GameEngine {
         eat: null,
         dead: null,
     };
+    soundEnabled: boolean = true;
 
     constructor(graphicEngine: GraphicEngine) {
         this.#graphicEngine = graphicEngine;
@@ -330,7 +331,7 @@ export class GameEngine {
             this.#snakeMovment();
 
             if (this.#checkCollison(ge)) {
-                this.#gameAudio.dead?.play();
+                if (this.soundEnabled) this.#gameAudio.dead?.play();
                 return;
             }
         }
@@ -366,14 +367,14 @@ export class GameEngine {
         }
 
         if (this.#oldDirection !== this.#direction) {
-            this.#gameAudio.turn?.play();
+            if (this.soundEnabled) this.#gameAudio.turn?.play();
             this.#oldDirection = this.#direction;
         }
 
         // Snakes tail movment
 
         if (this.#grow) {
-            this.#gameAudio.grow?.play();
+            if (this.soundEnabled) this.#gameAudio.grow?.play();
 
             this.#snake = [
                 this.#snake[0],
@@ -439,7 +440,7 @@ export class GameEngine {
             this.#snake[0].x === this.#apple.x &&
             this.#snake[0].y === this.#apple.y
         ) {
-            this.#gameAudio.eat?.play();
+            if (this.soundEnabled) this.#gameAudio.eat?.play();
             this.#grow = true;
             this.#score++;
 

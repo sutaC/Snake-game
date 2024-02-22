@@ -95,11 +95,15 @@ img {
     user-select: none;
 }
 
+.chField,
 button {
-    width: 4em;
+    width: 3em;
     aspect-ratio: 1;
     display: grid;
     place-content: center;
+
+    padding: 0.75em;
+    margin: 0;
 
     border: 2px solid var(--clr-secondary-2);
     border-radius: 0.5rem;
@@ -114,6 +118,8 @@ button {
     transition: all 0.2s ease;
 }
 
+.chField:hover,
+.chField:focus,
 button:hover,
 button:focus {
     opacity: 0.9;
@@ -121,8 +127,26 @@ button:focus {
     scale: 1.1;
 }
 
+.chField:active,
 button:active {
     opacity: 0.7;
+}
+
+.chField > input {
+    display: none;
+}
+
+.icon {
+    --_icon: ""; /* Override */
+    mask-image: var(--_icon);
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    background-color: var(--clr-secondary-2);
+
+    display: block;
+    min-width: 1.125rem;
+    aspect-ratio: 1;
 }
 
 /* --- */
@@ -214,12 +238,11 @@ dialog {
     background-color: var(--clr-neutral-2);
 }
 
-.game-dialog .button-wrap {
-    width: 70%;
+.button-wrap {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30%;
+    justify-content: space-evenly;
+    align-items: baseline;
+    gap: 2rem;
 }
 
 .gameOver #btn-play {
