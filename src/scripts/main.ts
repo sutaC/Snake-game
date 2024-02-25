@@ -1,5 +1,7 @@
-import { GraphicEngine, GameEngine, Direction } from "../modules/snake-game.js";
-import SwipeDetector from "../modules/swipe-detector.js";
+import GraphicEngine from "./modules/GraphicEngine.js";
+import GameEngine from "./modules/GameEngine.js";
+import SwipeDetector from "./modules/SwipeDetector.js";
+import { Direction } from "./modules/GameEngine.js";
 
 // Elements
 
@@ -65,25 +67,25 @@ const illustrations: Array<{
 }> = [
     {
         name: IllustrationNames.win,
-        imgSrc: "docs/assets/illustration-win.png",
-        img: preloadImage("docs/assets/illustration-win.png"),
+        imgSrc: "/src/images/illustration-win.png",
+        img: preloadImage("/src/images/illustration-win.png"),
     },
     {
         name: IllustrationNames.pause,
-        imgSrc: "docs/assets/illustration-pause.png",
-        img: preloadImage("docs/assets/illustration-pause.png"),
+        imgSrc: "/src/images/illustration-pause.png",
+        img: preloadImage("/src/images/illustration-pause.png"),
     },
     {
         name: IllustrationNames.lose,
-        imgSrc: "docs/assets/illustration-lose.png",
-        img: preloadImage("docs/assets/illustration-lose.png"),
+        imgSrc: "/src/images/illustration-lose.png",
+        img: preloadImage("/src/images/illustration-lose.png"),
     },
 ];
 
 // Buttons
 
 btnPause.addEventListener("click", () => {
-    gameEngine.gameStateActive = false;
+    gameEngine.setGameStateActive(false);
 
     h2DialogHeader.textContent = "Pause";
     imgIllustration.src =
@@ -94,7 +96,7 @@ btnPause.addEventListener("click", () => {
 });
 
 btnPlay.addEventListener("click", () => {
-    gameEngine.gameStateActive = true;
+    gameEngine.setGameStateActive(true);
     dialog.close();
     dialog.classList.remove("gameStart");
 });
@@ -122,12 +124,12 @@ const handleSoundEnabled = () => {
     if (soundEnabled) {
         iSoundEnabled.setAttribute(
             "style",
-            "--_icon: url(/docs/assets/icon-sound-enabled.svg);"
+            "--_icon: url(/src/images/icons/icon-sound-enabled.svg);"
         );
     } else {
         iSoundEnabled.setAttribute(
             "style",
-            "--_icon: url(/docs/assets/icon-sound-disabled.svg);"
+            "--_icon: url(/src/images/icons/icon-sound-disabled.svg);"
         );
     }
 };
@@ -160,22 +162,24 @@ window.addEventListener("keydown", (event: KeyboardEvent) => {
     event.preventDefault();
 });
 
-swipeDetector.element.addEventListener("swipe", (event: CustomEventInit) => {
-    switch (event.detail.direction) {
-        case "right":
-            gameEngine.changeDirection(Direction.Right);
-            break;
-        case "left":
-            gameEngine.changeDirection(Direction.Left);
-            break;
-        case "up":
-            gameEngine.changeDirection(Direction.Up);
-            break;
-        case "down":
-            gameEngine.changeDirection(Direction.Down);
-            break;
-    }
-});
+swipeDetector
+    .getElement()
+    .addEventListener("swipe", (event: CustomEventInit) => {
+        switch (event.detail.direction) {
+            case "right":
+                gameEngine.changeDirection(Direction.Right);
+                break;
+            case "left":
+                gameEngine.changeDirection(Direction.Left);
+                break;
+            case "up":
+                gameEngine.changeDirection(Direction.Up);
+                break;
+            case "down":
+                gameEngine.changeDirection(Direction.Down);
+                break;
+        }
+    });
 
 //  Score
 
@@ -192,7 +196,6 @@ canvas.addEventListener("scoreupdate", (event: CustomEventInit) => {
         bestScore = score;
         localStorage.setItem("bestscore", score);
         pBestScore.textContent = `Best Score ${score ?? 0}`;
-        console.log(bestScore);
     }
 });
 
