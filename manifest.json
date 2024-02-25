@@ -8,37 +8,37 @@
     "orientation": "portrait",
     "icons": [
         {
-            "src": "./docs/assets/icon-48x48.png",
+            "src": "./src/images/favicon-48x48.png",
             "sizes": "48x48",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "./docs/assets/icon-48x48.png",
+            "src": "./src/images/favicon-48x48.png",
             "sizes": "48x48",
             "type": "image/png",
             "purpose": "maskable"
         },
         {
-            "src": "./docs/assets/icon-128x128.png",
+            "src": "./src/images/favicon-128x128.png",
             "sizes": "128x128",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "./docs/assets/icon-128x128.png",
+            "src": "./src/images/favicon-128x128.png",
             "sizes": "128x128",
             "type": "image/png",
             "purpose": "maskable"
         },
         {
-            "src": "./docs/assets/icon-512x512.png",
+            "src": "./src/images/favicon-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "./docs/assets/icon-512x512.png",
+            "src": "./src/images/favicon-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
