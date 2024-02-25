@@ -7,7 +7,7 @@ const assets = [
     "/src/style/style.css",
     "/src/scripts/main.js",
     "/src/scripts/swHandler.js",
-    "/src/scripts/modules/swipe-detector.js",
+    "/src/scripts/modules/SwipeDetector.js",
     "/src/scripts/modules/GameEngine.js",
     "/src/scripts/modules/GameObject.js",
     "/src/scripts/modules/GraphicEngine.js",

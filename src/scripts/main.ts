@@ -1,6 +1,6 @@
 import GraphicEngine from "./modules/GraphicEngine.js";
 import GameEngine from "./modules/GameEngine.js";
-import SwipeDetector from "./modules/swipe-detector.js";
+import SwipeDetector from "./modules/SwipeDetector.js";
 import { Direction } from "./modules/GameEngine.js";
 
 // Elements
@@ -162,22 +162,24 @@ window.addEventListener("keydown", (event: KeyboardEvent) => {
     event.preventDefault();
 });
 
-swipeDetector.element.addEventListener("swipe", (event: CustomEventInit) => {
-    switch (event.detail.direction) {
-        case "right":
-            gameEngine.changeDirection(Direction.Right);
-            break;
-        case "left":
-            gameEngine.changeDirection(Direction.Left);
-            break;
-        case "up":
-            gameEngine.changeDirection(Direction.Up);
-            break;
-        case "down":
-            gameEngine.changeDirection(Direction.Down);
-            break;
-    }
-});
+swipeDetector
+    .getElement()
+    .addEventListener("swipe", (event: CustomEventInit) => {
+        switch (event.detail.direction) {
+            case "right":
+                gameEngine.changeDirection(Direction.Right);
+                break;
+            case "left":
+                gameEngine.changeDirection(Direction.Left);
+                break;
+            case "up":
+                gameEngine.changeDirection(Direction.Up);
+                break;
+            case "down":
+                gameEngine.changeDirection(Direction.Down);
+                break;
+        }
+    });
 
 //  Score
 

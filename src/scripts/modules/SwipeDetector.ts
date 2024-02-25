@@ -1,38 +1,38 @@
 export default class SwipeDetector {
-    #element;
+    private element;
 
-    #startX: number | null = null;
-    #startY: number | null = null;
+    private startX: number | null = null;
+    private startY: number | null = null;
 
-    #treshold = 0;
+    private treshold = 0;
 
     constructor(element: HTMLElement) {
-        this.#element = element;
+        this.element = element;
 
-        this.#element.addEventListener(
+        this.element.addEventListener(
             "touchstart",
-            this.#handleTouchStart.bind(this)
+            this.handleTouchStart.bind(this)
         );
 
-        this.#element.addEventListener(
+        this.element.addEventListener(
             "touchmove",
-            this.#handleTouchMove.bind(this)
+            this.handleTouchMove.bind(this)
         );
     }
 
-    #handleTouchStart(event: TouchEvent) {
+    private handleTouchStart(event: TouchEvent) {
         const touch = event.touches.item(0);
 
         if (!touch) {
             return;
         }
 
-        this.#startX = touch.clientX;
-        this.#startY = touch.clientY;
+        this.startX = touch.clientX;
+        this.startY = touch.clientY;
     }
 
-    #handleTouchMove(event: TouchEvent) {
-        if (!(this.#startX && this.#startY)) {
+    private handleTouchMove(event: TouchEvent) {
+        if (!(this.startX && this.startY)) {
             return;
         }
 
@@ -42,12 +42,12 @@ export default class SwipeDetector {
             return;
         }
 
-        let deltaX = this.#startX - touch.clientX,
-            deltaY = this.#startY - touch.clientY;
+        let deltaX = this.startX - touch.clientX,
+            deltaY = this.startY - touch.clientY;
 
         if (
-            Math.abs(deltaX) < this.#treshold &&
-            Math.abs(deltaY) < this.#treshold
+            Math.abs(deltaX) < this.treshold &&
+            Math.abs(deltaY) < this.treshold
         ) {
             return;
         }
@@ -72,24 +72,24 @@ export default class SwipeDetector {
             }
         }
 
-        this.#element.dispatchEvent(
+        this.element.dispatchEvent(
             new CustomEvent("swipe", { detail: { direction } })
         );
 
-        this.#startX = null;
-        this.#startY = null;
+        this.startX = null;
+        this.startY = null;
     }
 
     // Getters & Setters
 
-    get element() {
-        return this.#element;
+    public getElement() {
+        return this.element;
     }
 
-    set treshold(treshold: number) {
+    public setTreshold(treshold: number) {
         if (treshold < 0) {
             throw new Error("Treshold out of scope");
         }
-        this.#treshold = treshold;
+        this.treshold = treshold;
     }
 }
