@@ -26,10 +26,10 @@ export default class GameEngine {
     private oldDirection: string = this.direction;
 
     private snake: Array<GameObject> = [
-        new GameObject(4, 5, "0ff409", GameAssetsNames.snakeHeadRight),
-        new GameObject(3, 5, "0ff409", GameAssetsNames.snakeTail),
+        new GameObject(4, 5, "#0ff409", GameAssetsNames.snakeHeadRight),
+        new GameObject(3, 5, "#0ff409", GameAssetsNames.snakeTail),
     ];
-    private apple = new GameObject(7, 5, "f50a8b", GameAssetsNames.apple);
+    private apple = new GameObject(7, 5, "#f50a8b", GameAssetsNames.apple);
 
     private score = 0;
 
@@ -50,7 +50,8 @@ export default class GameEngine {
         eat: null,
         dead: null,
     };
-    soundEnabled: boolean = true;
+
+    public soundEnabled: boolean = true;
 
     constructor(graphicEngine: GraphicEngine) {
         this.graphicEngine = graphicEngine;
@@ -91,10 +92,10 @@ export default class GameEngine {
 
         this.gameAudio.turn.volume = 0.5;
         // Startup
-        this.graphicEngine.update = this.update.bind(this);
+        this.graphicEngine.setUpdate(this.update.bind(this));
     }
 
-    update(ge: GraphicEngine, deltaTime: number) {
+    private update(ge: GraphicEngine, deltaTime: number) {
         this.drawScene(ge);
 
         this.time += deltaTime;
@@ -113,7 +114,7 @@ export default class GameEngine {
 
     // Update steps
 
-    snakeMovment() {
+    private snakeMovment() {
         // Snakes head movment
 
         let prevX = this.snake[0].x,
@@ -155,7 +156,7 @@ export default class GameEngine {
                 new GameObject(
                     prevX,
                     prevY,
-                    "0ff409",
+                    "#0ff409",
                     GameAssetsNames.snakeTail
                 ),
                 ...this.snake.slice(1),
@@ -180,7 +181,7 @@ export default class GameEngine {
         }
     }
 
-    checkCollison(ge: GraphicEngine) {
+    private checkCollison(ge: GraphicEngine) {
         // Snake wall collison
 
         if (
@@ -232,7 +233,7 @@ export default class GameEngine {
         return false;
     }
 
-    drawScene(graphicEngine: GraphicEngine) {
+    private drawScene(graphicEngine: GraphicEngine) {
         this.snake.forEach((segment) => {
             graphicEngine.drawGameObject(segment);
         });
@@ -242,7 +243,7 @@ export default class GameEngine {
 
     // Game events
 
-    async gameOver() {
+    private async gameOver() {
         this.snakeStateActive = false;
 
         for (let i = 0; i < this.snake.length; i++) {
@@ -265,7 +266,7 @@ export default class GameEngine {
         }, 2000);
     }
 
-    summonApple() {
+    private summonApple() {
         let x: number, y: number;
 
         do {
@@ -281,12 +282,12 @@ export default class GameEngine {
 
     // User interaction
 
-    reset() {
+    public reset() {
         this.snake = [
-            new GameObject(4, 5, "0ff409", GameAssetsNames.snakeHeadRight),
-            new GameObject(3, 5, "0ff409", GameAssetsNames.snakeTail),
+            new GameObject(4, 5, "#0ff409", GameAssetsNames.snakeHeadRight),
+            new GameObject(3, 5, "#0ff409", GameAssetsNames.snakeTail),
         ];
-        this.apple = new GameObject(7, 5, "f50a8b", GameAssetsNames.apple);
+        this.apple = new GameObject(7, 5, "#f50a8b", GameAssetsNames.apple);
 
         this.direction = Direction.Right;
         this.oldDirection = this.direction;
@@ -297,7 +298,7 @@ export default class GameEngine {
         this.graphicEngine.setGameStateActive(true);
     }
 
-    changeDirection(desiredDirection: Direction) {
+    public changeDirection(desiredDirection: Direction) {
         if (!this.graphicEngine.getGameStateActive()) return;
 
         switch (desiredDirection) {
@@ -318,7 +319,7 @@ export default class GameEngine {
         this.direction = desiredDirection;
     }
 
-    setGameStateActive(state: boolean) {
+    public setGameStateActive(state: boolean) {
         this.graphicEngine.setGameStateActive(state);
     }
 }

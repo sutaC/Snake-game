@@ -2,10 +2,11 @@ export default class Particle {
     public x: number;
     public y: number;
     public size: number;
-    public speedX: number;
-    public speedY: number;
-    public speedShrink: number;
     public color: string;
+
+    private speedShrink: number;
+    private speedY: number;
+    private speedX: number;
 
     constructor(
         x: number,
@@ -23,7 +24,7 @@ export default class Particle {
         this.color = color;
     }
 
-    update(deltaTime: number) {
+    public update(deltaTime: number) {
         this.x += this.speedX * deltaTime;
         this.y += this.speedY * deltaTime;
         this.size -= this.speedShrink * deltaTime;

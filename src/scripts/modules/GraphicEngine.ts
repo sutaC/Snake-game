@@ -24,10 +24,8 @@ export default class GraphicEngine {
         img?: CanvasImageSource;
     }> = [];
 
-    update: (graphicEngine: GraphicEngine, deltaTime: number) => void = (
-        ge: GraphicEngine,
-        dt: number
-    ) => {};
+    private update: (graphicEngine: GraphicEngine, deltaTime: number) => void =
+        (ge: GraphicEngine, dt: number) => {};
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -49,7 +47,7 @@ export default class GraphicEngine {
 
     // Draw Methods
 
-    drawParticle(particle: Particle) {
+    public drawParticle(particle: Particle) {
         if (!this.ctx) {
             throw new Error("Could not connect to the Context");
         }
@@ -62,7 +60,7 @@ export default class GraphicEngine {
         this.ctx.closePath();
     }
 
-    drawRect(x: number, y: number, color: string) {
+    public drawRect(x: number, y: number, color: string) {
         if (!this.ctx) {
             throw new Error("Could not connect to the Context");
         }
@@ -75,7 +73,7 @@ export default class GraphicEngine {
         this.ctx.closePath();
     }
 
-    drawImage(x: number, y: number, image: CanvasImageSource) {
+    public drawImage(x: number, y: number, image: CanvasImageSource) {
         if (!this.ctx) {
             throw new Error("Could not connect to the Context");
         }
@@ -89,7 +87,7 @@ export default class GraphicEngine {
 
     // Render methods
 
-    render(timeStamp: number): number {
+    private render(timeStamp: number): number {
         if (!this.ctx) {
             throw new Error("Could not connect to the Context");
         }
@@ -125,7 +123,7 @@ export default class GraphicEngine {
                     this.drawRect(
                         this.gap + x * (this.cellSize + this.gap),
                         this.gap + y * (this.cellSize + this.gap),
-                        "d4d0ec"
+                        "#d4d0ec"
                     );
                 }
             }
@@ -158,7 +156,7 @@ export default class GraphicEngine {
 
     // Controll methods
 
-    drawGameObject(gameObject: GameObject) {
+    public drawGameObject(gameObject: GameObject) {
         if (gameObject.x < 0 || gameObject.x >= this.gameGrid) {
             throw new Error("X index out of scope");
         }
@@ -185,7 +183,7 @@ export default class GraphicEngine {
         }
     }
 
-    summonParticles(x: number, y: number, color: string) {
+    public summonParticles(x: number, y: number, color: string) {
         const posX =
                 this.gap * 2 +
                 this.cellSize * 1.5 +
@@ -203,29 +201,29 @@ export default class GraphicEngine {
 
     // Getters & Setters
 
-    getGameGrid() {
+    public getGameGrid() {
         return this.gameGrid;
     }
 
-    setGameStateActive(state: boolean) {
+    public setGameStateActive(state: boolean) {
         this.gameStateActive = state;
         if (state) this.render(0);
     }
-    getGameStateActive() {
+    public getGameStateActive() {
         return this.gameStateActive;
     }
 
-    getCanvas() {
+    public getCanvas() {
         return this.canvas;
     }
 
-    setUpdate(
+    public setUpdate(
         update: (renderingEngine: GraphicEngine, deltaTime: number) => void
     ) {
         this.update = update;
     }
 
-    setAssets(assets: Array<{ name: string; imgSrc: string }>) {
+    public setAssets(assets: Array<{ name: string; imgSrc: string }>) {
         this.assets = [];
         assets.forEach((asset) => {
             const img = new Image(this.cellSize, this.cellSize);
@@ -238,7 +236,8 @@ export default class GraphicEngine {
             });
         });
     }
-    getAssets() {
+
+    public getAssets() {
         return this.assets;
     }
 }
