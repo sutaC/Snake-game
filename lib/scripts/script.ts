@@ -1,5 +1,7 @@
-import { GraphicEngine, GameEngine, Direction } from "../modules/snake-game.js";
+import GraphicEngine from "../modules/GraphicEngine.js";
+import GameEngine from "../modules/GameEngine.js";
 import SwipeDetector from "../modules/swipe-detector.js";
+import { Direction } from "../modules/GameEngine.js";
 
 // Elements
 
@@ -83,7 +85,7 @@ const illustrations: Array<{
 // Buttons
 
 btnPause.addEventListener("click", () => {
-    gameEngine.gameStateActive = false;
+    gameEngine.setGameStateActive(false);
 
     h2DialogHeader.textContent = "Pause";
     imgIllustration.src =
@@ -94,7 +96,7 @@ btnPause.addEventListener("click", () => {
 });
 
 btnPlay.addEventListener("click", () => {
-    gameEngine.gameStateActive = true;
+    gameEngine.setGameStateActive(true);
     dialog.close();
     dialog.classList.remove("gameStart");
 });
