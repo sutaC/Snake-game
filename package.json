@@ -4,17 +4,20 @@
     "description": "",
     "main": "script.js",
     "scripts": {
-        "build": "tsc",
-        "watch:build": "tsc -w",
-        "dev": "serve ./app/"
+        "start": "serve ./app/",
+        "build": "tsc && npm run uglify",
+        "dev": "concurrently -n \"cmp,srv\" -c \"blue,green\" -p \"[{name}]\" \"tsc -w\" \"npm start\"",
+        "uglify": "for fl in $(find ./app -name \"*.js\"); do uglifyjs $fl -o $fl; done"
     },
     "keywords": [],
     "author": "sutaC",
     "license": "ISC",
     "dependencies": {
-        "typescript": "^5.3.3"
+        "typescript": "^5.3.3",
+        "uglify-js": "^3.18.0"
     },
     "devDependencies": {
+        "concurrently": "^8.2.2",
         "serve": "^14.2.3"
     }
 }
