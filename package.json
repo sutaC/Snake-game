@@ -5,12 +5,16 @@
     "main": "script.js",
     "scripts": {
         "build": "tsc",
-        "dev": "tsc -w"
+        "watch:build": "tsc -w",
+        "dev": "serve ./app/"
     },
     "keywords": [],
     "author": "sutaC",
     "license": "ISC",
     "dependencies": {
         "typescript": "^5.3.3"
+    },
+    "devDependencies": {
+        "serve": "^14.2.3"
     }
 }

@@ -67,18 +67,18 @@ const illustrations: Array<{
 }> = [
     {
         name: IllustrationNames.win,
-        imgSrc: "/src/images/illustration-win.png",
-        img: preloadImage("/src/images/illustration-win.png"),
+        imgSrc: "/images/illustration-win.png",
+        img: preloadImage("/images/illustration-win.png"),
     },
     {
         name: IllustrationNames.pause,
-        imgSrc: "/src/images/illustration-pause.png",
-        img: preloadImage("/src/images/illustration-pause.png"),
+        imgSrc: "/images/illustration-pause.png",
+        img: preloadImage("/images/illustration-pause.png"),
     },
     {
         name: IllustrationNames.lose,
-        imgSrc: "/src/images/illustration-lose.png",
-        img: preloadImage("/src/images/illustration-lose.png"),
+        imgSrc: "/images/illustration-lose.png",
+        img: preloadImage("/images/illustration-lose.png"),
     },
 ];
 
@@ -124,12 +124,12 @@ const handleSoundEnabled = () => {
     if (soundEnabled) {
         iSoundEnabled.setAttribute(
             "style",
-            "--_icon: url(/src/images/icons/icon-sound-enabled.svg);"
+            "--_icon: url(/images/icons/icon-sound-enabled.svg);"
         );
     } else {
         iSoundEnabled.setAttribute(
             "style",
-            "--_icon: url(/src/images/icons/icon-sound-disabled.svg);"
+            "--_icon: url(/images/icons/icon-sound-disabled.svg);"
         );
     }
 };

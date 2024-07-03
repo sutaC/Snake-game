@@ -60,35 +60,35 @@ export default class GameEngine {
         this.graphicEngine.setAssets([
             {
                 name: GameAssetsNames.snakeHeadRight,
-                imgSrc: "/src/images/assets/snake-head-right.svg",
+                imgSrc: "/images/assets/snake-head-right.svg",
             },
             {
                 name: GameAssetsNames.snakeHeadDown,
-                imgSrc: "/src/images/assets/snake-head-down.svg",
+                imgSrc: "/images/assets/snake-head-down.svg",
             },
             {
                 name: GameAssetsNames.snakeHeadLeft,
-                imgSrc: "/src/images/assets/snake-head-left.svg",
+                imgSrc: "/images/assets/snake-head-left.svg",
             },
             {
                 name: GameAssetsNames.snakeHeadUp,
-                imgSrc: "/src/images/assets/snake-head-up.svg",
+                imgSrc: "/images/assets/snake-head-up.svg",
             },
             {
                 name: GameAssetsNames.snakeTail,
-                imgSrc: "/src/images/assets/snake-tail.svg",
+                imgSrc: "/images/assets/snake-tail.svg",
             },
             {
                 name: GameAssetsNames.apple,
-                imgSrc: "/src/images/assets/apple.svg",
+                imgSrc: "/images/assets/apple.svg",
             },
         ]);
 
         // Game audio setup
-        this.gameAudio.dead = new Audio("/src/audio/snake-dead.mp3");
-        this.gameAudio.eat = new Audio("/src/audio/snake-eat.mp3");
-        this.gameAudio.grow = new Audio("/src/audio/snake-grow.mp3");
-        this.gameAudio.turn = new Audio("/src/audio/snake-turn.mp3");
+        this.gameAudio.dead = new Audio("/audio/snake-dead.mp3");
+        this.gameAudio.eat = new Audio("/audio/snake-eat.mp3");
+        this.gameAudio.grow = new Audio("/audio/snake-grow.mp3");
+        this.gameAudio.turn = new Audio("/audio/snake-turn.mp3");
 
         this.gameAudio.turn.volume = 0.5;
         // Startup
