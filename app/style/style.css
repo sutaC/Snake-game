@@ -231,7 +231,7 @@ dialog {
 }
 
 .game-dialog #illustration {
-    width: clamp(5rem, 50%, 20rem);
+    width: clamp(5rem, 50%, 8rem);
     aspect-ratio: 1;
 
     border: 3px solid var(--clr-secondary-1);
