@@ -67,18 +67,18 @@ const illustrations: Array<{
 }> = [
     {
         name: IllustrationNames.win,
-        imgSrc: "/images/illustration-win.png",
-        img: preloadImage("/images/illustration-win.png"),
+        imgSrc: "/images/illustration-win.webp",
+        img: preloadImage("/images/illustration-win.webp"),
     },
     {
         name: IllustrationNames.pause,
-        imgSrc: "/images/illustration-pause.png",
-        img: preloadImage("/images/illustration-pause.png"),
+        imgSrc: "/images/illustration-pause.webp",
+        img: preloadImage("/images/illustration-pause.webp"),
     },
     {
         name: IllustrationNames.lose,
-        imgSrc: "/images/illustration-lose.png",
-        img: preloadImage("/images/illustration-lose.png"),
+        imgSrc: "/images/illustration-lose.webp",
+        img: preloadImage("/images/illustration-lose.webp"),
     },
 ];
 
