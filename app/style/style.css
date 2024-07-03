@@ -1,6 +1,9 @@
 /* Preset */
 
-@import url("https://fonts.googleapis.com/css2?family=Offside&display=swap");
+@font-face {
+    font-family: Offside;
+    src: url("/style/fonts/Offside-Regular.ttf");
+}
 
 :root {
     --clr-primary: #0ff409;
