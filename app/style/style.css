@@ -2,7 +2,8 @@
 
 @font-face {
     font-family: Offside;
-    src: url("/style/fonts/Offside-Regular.ttf");
+    src: local("Offside") url("/style/fonts/Offside-Regular.ttf");
+    font-display: swap;
 }
 
 :root {
