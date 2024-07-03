@@ -65,6 +65,7 @@ async function updateCache(request: Request) {
 async function handleInstall() {
     // Delete old cache
     await caches.delete(cacheNameStatic);
+    await caches.delete(cacheNameDynamic);
 
     // Installs stataic cache
     const cache = await caches.open(cacheNameStatic);
