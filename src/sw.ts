@@ -5,6 +5,7 @@ const assets = [
     "/manifest.json",
     "/index.html",
     "/style/style.css",
+    "/style/fonts/Offside-Regular.ttf",
     "/scripts/main.js",
     "/scripts/swHandler.js",
     "/scripts/modules/SwipeDetector.js",
@@ -33,7 +34,6 @@ const assets = [
     "/audio/snake-eat.mp3",
     "/audio/snake-grow.mp3",
     "/audio/snake-turn.mp3",
-    "https://fonts.googleapis.com/css2?family=Offside&display=swap",
 ];
 
 // Functions
