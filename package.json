@@ -4,7 +4,7 @@
     "description": "",
     "main": "script.js",
     "scripts": {
-        "start": "serve ./app/",
+        "start": "http-server ./app/",
         "build": "tsc && npm run uglify",
         "dev": "concurrently -n \"cmp,srv\" -c \"blue,green\" -p \"[{name}]\" \"tsc -w\" \"npm start\"",
         "uglify": "for fl in $(find ./app -name \"*.js\"); do uglifyjs $fl -o $fl; done"
@@ -17,7 +17,7 @@
         "uglify-js": "^3.18.0"
     },
     "devDependencies": {
-        "concurrently": "^8.2.2",
-        "serve": "^14.2.3"
+        "concurrently": "^10.0.6",
+        "http-server": "^14.1.1"
     }
 }
